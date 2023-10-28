@@ -1,0 +1,45 @@
+.add-upsell-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .add-upsell-breadcrumb h2 {
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .add-upsell-container {
+    padding: 20px;
+  }
+  
+  .add-upsell-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+
+  .add-upsell-container {
+    padding: 20px;
+  }
+  .add-upsell-subcontainer{
+    border:1px solid #000;
+    padding:15px;
+    background: #fff;
+    border-radius: 5px;
+  }
+
+  .add-upsell-container h2{
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+}
+
+.add-upsell-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 4px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin-top: 20px;
+}

@@ -1,0 +1,270 @@
+.day-container {
+  padding: 20px;
+}
+
+
+
+.custom-background {
+  background-image: url("../../../../assets/img/cube_dark.jpg");
+  border-radius: 5px;
+  position: relative;
+  background-size: cover;
+  width: 100%;
+  height: 400px;
+  
+}
+
+.custom-background .text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+.text-overlay h2 {
+  color: #fff;
+  font-family: "Rajdhani", sans-serif;
+}
+.text-overlay p {
+  color: #fff;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+}
+
+.custom-container {
+  border: 1px solid #000;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.custom-container1 {
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+.nested-container h2 {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  font-size: 28px;
+  font-family: "Rajdhani", sans-serif;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.nested-container .inner-sub-container {
+  background-color: #f5f4f7;
+  border: 1px solid #e7e6e8;
+  height: 200px;
+  display: flex;
+  flex-direction: row;
+  padding: 16px;
+}
+
+.nested-container h2 {
+  margin: 0;
+}
+
+.inner-sub-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-box {
+  border: 1px solid black;
+  width: 100%;
+  background-color: #000;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80px;
+  justify-content: center;
+}
+
+.item-box .content1 {
+  font-size: 16px;
+  color: #fff;
+  margin: 5px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.item-box .content2 {
+  font-size: 18px;
+  color: #dcb52c;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.item-box1 {
+  width: 100%;
+  height: 120px;
+  margin: 20px;
+  font-size: 15px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.call-btn {
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.call-btn1 {
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.schedule-btn {
+    width: 170px;
+    height: 45px;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+.item-container {
+  margin-bottom: 20px;
+}
+
+.nested-container .inner-sub-container2 {
+    background-color: #f5f4f7;
+    border: 1px solid #e7e6e8;
+    height: 280px;
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+  }
+
+  .item-box2 {
+    width: 100%;
+    height: 400px;
+    margin: 20px;
+    font-size: 15px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .continue-btn{
+    color:#000 !important;
+    background: #dcb52c !important;
+    font-size: 16px;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+  }
+
+  .lesson{
+    font-size: 25px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+ 
+@media (min-width: 768px) {
+    .rows {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      
+    }
+    .continue-btn{
+       width:300px;
+      }
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+  }
+
+@media (max-width: 767px) {
+    .custom-container{
+        height:1930px;
+    }
+    .nested-container{
+        height:1750px;
+    }
+  .item-container {
+    margin-bottom: 0;
+  }
+  .inner-sub-container {
+    display: flex;
+    flex-direction: column !important;
+    height:340px !important;
+  }
+  .inner-sub-container2 {
+    display: flex;
+    flex-direction: column !important;
+    height:380px !important;
+  }
+  .item-box{
+    margin-top: 10px;
+  }
+  .item-box1{
+    margin: 10px auto;
+  }
+  .item-box2{
+    margin: 10px auto;
+   
+  }
+ 
+  .call-btn{
+    margin-top: 20px;
+  }
+  .continue-btn{
+    width:240px;
+    display: block; 
+    margin: 0 auto;
+   }
+   .lesson{
+    font-size: 18px;
+   }
+   .schedule-btn{
+  margin-top: 20px;
+   }
+   .assign-area{
+    width:235px !important;
+   }
+   .header-container {
+    display: block;
+    margin-left: 35px;
+  }
+   
+}
+
+@media (max-width: 767px) {
+  .custom-background {
+    background-image: url("../../../../assets/img/cube_dark.jpg") !important;
+    background-size: cover;
+    margin-top: 20px;
+  }
+  .day-container .rows {
+    justify-content: center;
+    text-align: center;
+  }
+  .col-lg-8 {
+    width: 100%;
+  }
+  .col-lg-4 {
+    width: 100%;
+  }
+  .col-lg-8 iframe {
+    width: 100%; 
+  }
+ 
+ 
+}
+

@@ -1,0 +1,53 @@
+.faq-breadcrumb {
+  padding: 10px;
+  background: #fff;
+}
+
+.faq-container {
+  padding: 20px;
+}
+
+.faq-subcontainer {
+    border: 1px solid #000;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+ 
+}
+
+.faq-container h2 {
+  font-size: 24px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+@media (min-width: 768px) {
+  .faq-breadcrumb {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 20px;
+    
+  }
+  .faq-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+   
+  }
+  .faq-outer-container {
+    min-height: 100vh;
+    background-color: #fff;
+  }
+  .faq{
+    background: #fff;
+    max-width: 920px;
+    margin: 0  auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .faq-breadcrumb {
+    max-width: 100%;
+    padding:20px;
+  }
+ 
+}

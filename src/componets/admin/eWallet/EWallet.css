@@ -1,0 +1,53 @@
+.ewallet-breadcrumb {
+  padding: 10px;
+  background: #fff;
+}
+.ewallet-breadcrumb p {
+  font-size: 24px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.ewallet-container {
+  padding: 20px;
+}
+
+.ewallet-breadcrumb-subcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ewallet-subcontainer {
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #fff;
+  padding: 20px;
+}
+
+.ewallet-subcontainer h2 {
+  font-family: "Rajdhani", sans-serif !important;
+  font-size: 24px;
+}
+
+.delete-button {
+  background-color: rgb(255, 235, 235);
+  color: rgb(254, 114, 114);
+  border:1px solid red;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.edit-button {
+  background-color: rgb(219, 246, 219);
+  color: green;
+  border:1px solid green;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+
+@media (max-width: 768px) {
+  .ewallet-breadcrumb-subcontainer {
+    display: block;
+    margin-left: 35px;
+  }
+
+}

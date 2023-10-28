@@ -1,0 +1,56 @@
+.site-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .site-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .site-container {
+    padding: 20px;
+  }
+  
+  .site-breadcrumb-subcontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .site-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+    padding: 20px;
+  }
+  
+  .site-subcontainer h2 {
+    font-family: "Rajdhani", sans-serif !important;
+    font-size: 24px;
+  }
+
+  .site-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 15px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+  
+  }
+
+  .ant-upload-text{
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  @media (max-width: 768px) {
+    
+    .site-breadcrumb-subcontainer {
+      display: block;
+      margin-left: 35px;
+    }
+
+}

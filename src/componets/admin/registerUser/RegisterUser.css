@@ -1,0 +1,49 @@
+
+.block-button {
+    background-color: rgb(255, 235, 235);
+    color: rgb(254, 114, 114);
+    border:1px solid red;
+  }
+  
+  .unblock-button {
+    background-color: rgb(219, 246, 219);
+    color: green;
+    border:1px solid green;
+  }
+
+  
+  .user-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .user-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .user-container {
+    padding: 20px;
+  }
+  
+  .user-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+  
+  .user-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+  }
+  
+   
+    
+    @media (max-width: 768px) {
+    
+      .user-breadcrumb p{
+          margin-left: 30px !important;
+      }
+    
+    }

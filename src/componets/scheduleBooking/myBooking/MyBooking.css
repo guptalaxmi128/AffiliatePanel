@@ -1,0 +1,42 @@
+.mybooking-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .mybooking-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .mybooking-container {
+    padding: 20px;
+  }
+  
+  .mybooking-breadcrumb-subcontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+
+  .mybooking-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+    padding:20px;
+  }
+  
+  .mybooking-subcontainer h2 {
+     font-family: 'Rajdhani', sans-serif !important;
+     font-size: 24px;
+    }
+
+  
+ 
+    @media (max-width: 767px) {
+ 
+        .mybooking-breadcrumb-subcontainer {
+         display: block;
+         margin-left: 35px;
+       }
+        
+     }

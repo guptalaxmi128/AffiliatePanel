@@ -1,0 +1,70 @@
+.curriculum-container{
+    /* background: #fff; */
+   min-height:100vh;
+   padding:30px;
+}
+
+.curriculum-container h2{
+    font-size: 32px;
+    font-family: "Rajdhani", sans-serif;
+}
+
+.curriculum-subcontainer {
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+}
+
+.curriculum-container h3{
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+   
+}
+
+.curriculum-container p{
+    font-size: 18px;
+    font-family: "Rajdhani", sans-serif;
+}
+
+.curriculum-container h4{
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+    text-align: center;
+   
+}
+
+.curriculum-subcontainer p{
+    font-size: 18px;
+    font-family: "Rajdhani", sans-serif;
+    text-align: center;
+   
+}
+
+.curriculum-card {
+    box-shadow: 0 0 6px goldenrod;
+  }
+  
+  .curriculum-hover :hover {
+    border: 2px solid goldenrod;
+ 
+  }
+
+  .curriculum-subcontainer1 {
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    min-width:70vw;
+}
+
+
+  

@@ -1,0 +1,49 @@
+
+.block-btn {
+    background-color: rgb(255, 235, 235);
+    color: rgb(254, 114, 114);
+    border:1px solid red;
+  }
+  
+  .unblock-btn {
+    background-color: rgb(219, 246, 219);
+    color: green;
+    border:1px solid green;
+  }
+
+  
+  .users-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .users-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .users-container {
+    padding: 20px;
+  }
+  
+  .users-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+  
+  .users-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+  }
+  
+   
+    
+    @media (max-width: 768px) {
+    
+      .users-breadcrumb p{
+          margin-left: 30px !important;
+      }
+    
+    }

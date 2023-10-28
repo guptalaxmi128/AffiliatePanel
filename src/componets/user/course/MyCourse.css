@@ -1,0 +1,49 @@
+.card-hover:hover {
+  border: 2px solid goldenrod;
+}
+
+@media (max-width: 768px) {
+  .card-hover {
+    margin: 0 auto;
+  }
+}
+
+.my-course-container {
+  height: 100vh;
+ 
+}
+
+.card-hover {
+  width: 300px;
+}
+
+.custom-hr {
+  border-top: 1px solid #dcdcdc;
+  margin-top: 10px;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.info-text {
+  margin-left: 10px;
+}
+
+.price-text1 {
+  margin-left: 10px;
+  color: goldenrod;
+}
+
+.custom-card1 {
+    width: 300px;
+    box-shadow: 0 0 6px goldenrod;
+  }
+
+  @media (min-width: 768px) {
+    .my-course-container {
+      padding: 60px; 
+    }
+  }

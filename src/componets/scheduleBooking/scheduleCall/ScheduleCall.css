@@ -1,0 +1,79 @@
+.call-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .call-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .call-container {
+    padding: 20px;
+  }
+  
+  .call-breadcrumb-subcontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+.call-container {
+    padding: 20px;
+  }
+  
+  .call-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+    padding:20px;
+  }
+  
+  .call-subcontainer h2 {
+     font-family: 'Rajdhani', sans-serif !important;
+     font-size: 24px;
+    }
+
+    .schedule-call-btn{
+        background: #ddb42c !important;
+        border-radius: 5px;
+        padding: 6px 15px;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000 !important;
+        font-family: "Rajdhani", sans-serif;
+        margin:0px auto;
+        display: flex;
+      
+    }
+  
+    @media (max-width: 768px) {
+        .date-field{
+            width:290px;
+        }
+        .timing{
+            width:290px;
+          }
+      
+      }
+
+      @media (min-width: 768px) {
+        .date-field{
+            width:330px;
+        }
+        .timing{
+            width:330px;
+          }
+      }
+  
+
+      @media (max-width: 767px) {
+ 
+       .call-breadcrumb-subcontainer {
+        display: block;
+        margin-left: 35px;
+      }
+       
+    }
+     
+        
+     

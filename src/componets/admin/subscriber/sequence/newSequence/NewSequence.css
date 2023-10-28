@@ -1,0 +1,37 @@
+.new-sequence-container {
+  padding: 20px;
+}
+
+.new-sequence-container h2 {
+  font-family: "Rajdhani", sans-serif !important;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-sequence-subcontainer {
+  padding:50px;
+}
+
+.new-sequence-subcontainer0 {
+  border: 1px solid #dcdcdc;
+  max-height: 400px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+  overflow: hidden; 
+  padding:20px;
+}
+
+.template{
+    height: 300px;
+}
+
+.new-sequence-subcontainer0 p{
+    font-family: "Rajdhani", sans-serif;
+    font-size: 14px;
+    text-align: left !important;
+}

@@ -1,0 +1,41 @@
+.add-text-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .add-text-breadcrumb h2 {
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+  }
+   
+  .add-text-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+.add-text-container{
+    padding:20px;
+}
+
+.add-text-container h2{
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+}
+
+.text-save-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 4px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+}
+
+.add-text-subcontainer{
+    border:1px solid #000;
+    padding:20px;
+    border-radius: 5px;
+}

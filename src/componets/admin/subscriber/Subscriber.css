@@ -1,0 +1,40 @@
+.subscriber-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .subscriber-breadcrumb p {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .subscriber-breadcrumb-subcontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .subscriber-container {
+    padding: 15px;
+  }
+  
+  .subscriber-subcontainer {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #fff;
+    padding:10px;
+  }
+  
+  .subscriber-subcontainer h2 {
+     font-family: 'Rajdhani', sans-serif !important;
+     font-size: 24px;
+    }
+  
+    @media (max-width: 768px) {
+    
+        .subscriber-breadcrumb-subcontainer {
+          display: block;
+          margin-left: 35px;
+        }
+    
+    }
+  

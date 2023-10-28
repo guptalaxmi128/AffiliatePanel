@@ -1,0 +1,106 @@
+.add-video-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .add-video-breadcrumb h2 {
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .add-video-container {
+    padding: 20px;
+  }
+  
+  .add-video-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+
+  .add-video-container {
+    padding: 20px;
+  }
+  .add-video{
+    background: #fff;
+    border: 1px dashed #000;
+    border-radius: 5px;
+    padding:10px;
+  }
+
+  .add-video-container h2{
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .add-video-container p{
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .add-video-subcontainer{
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    }
+
+  .video-setting{
+    border: 1px dashed #000;
+    max-height: 500px;
+    background: #fff;
+    border-radius: 5px;
+
+  }
+
+  .video-setting h2{
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+    padding:10px;
+  }
+
+  .scrollable-container {
+    max-height: 500px;
+    /* overflow-y: scroll;  */
+    border: 1px solid #ddd; 
+    padding: 15px;
+  }
+  .scrollable-container h2{
+    font-size: 20px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .scrollable-container p{
+    font-size: 16px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .upload-thumbnail{
+    padding:10px;
+    width:250px;
+    height:150px;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .replace-thumbnail{
+    font-size: 16px;
+    font-family: "Rajdhani", sans-serif;
+    width:100%;
+    height:40px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .add-video-subcontainer{
+        width:100%;
+    }
+    .lead-breadcrumb p{
+        margin-left: 30px !important;
+    }
+  
+  }
