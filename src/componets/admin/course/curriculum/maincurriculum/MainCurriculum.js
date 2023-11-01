@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Input, Button, Space, Menu, Dropdown, message } from "antd";
+import {
+  Row,
+  Col,
+  Input,
+  Button,
+  Space,
+  Menu,
+  Dropdown,
+  message,
+  Select,
+} from "antd";
 import {
   PlusCircleOutlined,
   MoreOutlined,
   DownOutlined,
 } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./MainCurriculum.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { getCourse } from "../../../../../actions/course/course";
+import {
+  addSection,
+  getSectionById,
+} from "../../../../../actions/section/section";
+
+const { Option } = Select;
 
 const DraggableSection = ({
   section,
   onRemove,
-
   sectionIndex,
   sections,
   setSections,
@@ -21,25 +38,44 @@ const DraggableSection = ({
   setSectionName,
   lessons,
   setLessons,
+  courseId,
+  isQuickActionsActive,
+  setIsQuickActionsActive,
 }) => {
-  const [isQuickActionsActive, setIsQuickActionsActive] = useState(false);
+  const dispatch = useDispatch();
+  // const course = useSelector((state) => state.course.course);
+
   const [newLesson, setNewLesson] = useState("");
   const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [newLessonName, setNewLessonName] = useState("");
+  const [isPublished, setIsPublished] = useState(false);
+  const [isAddContentVisible, setIsAddContentVisible] = useState(false);
+  // const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const sectionInfo = {
+    sectionName: sectionName,
+    courseId: courseId,
+  };
+
+  // const handleCourseChange = (value) => {
+  //   setSelectedCourse(value);
+  // };
+
+  // useEffect(() => {
+  //   dispatch(getCourse());
+  // }, [dispatch]);
+
+  const handlePublishClick = () => {
+    setIsPublished(true);
+    setIsAddContentVisible(true);
+  };
 
   const addLesson = () => {
     if (newLesson) {
-      // Generate a unique ID for the new lesson
       const newLessonId = lessons.length + 1;
-
-      // Create the new lesson object
       const newLessonItem = { id: newLessonId, name: newLesson };
-
-      // Add the new lesson to the lessons array
       setLessons([...lessons, newLessonItem]);
-
-      // Reset the input and the adding lesson state
       setNewLesson("");
     }
     setIsAddingLesson(false);
@@ -47,10 +83,12 @@ const DraggableSection = ({
 
   const handleSave = () => {
     setIsQuickActionsActive(true);
+    dispatch(addSection(sectionInfo));
+    message.success("Section created successfully!");
   };
 
   const handleRename = () => {
-    setIsQuickActionsActive(false);
+    // setIsQuickActionsActive(false);
   };
 
   const handleCancel = () => {
@@ -59,13 +97,7 @@ const DraggableSection = ({
 
   const handlePublishAll = () => {};
 
-  // const handleDuplicate = () => {
-  //   const duplicatedSection = JSON.parse(JSON.stringify(section));
-  //   duplicatedSection.name = `${section.name} Copy`;
-  //   const duplicatedLessons = section.lessons.map((lesson) => `${lesson} Copy`);
-  //   duplicatedSection.lessons = duplicatedLessons;
-  //   setSections([...sections, duplicatedSection]);
-  // };
+  
 
   const handleDuplicate = () => {
     const duplicatedSection = JSON.parse(JSON.stringify(section));
@@ -176,6 +208,8 @@ const DraggableSection = ({
     </Menu>
   );
 
+  console.log(isQuickActionsActive);
+  console.log(sectionName);
   console.log(sections);
   return (
     <Droppable droppableId={`section-${section.id}`} type="group">
@@ -186,23 +220,27 @@ const DraggableSection = ({
             style={{ paddingLeft: "0px", paddingRight: "0px" }}
           >
             <div className="right-container">
-              {isQuickActionsActive ? (
-                <div className="quick-actions-container">
-                  <Col lg={12} xs={10} sm={12}>
-                    <h3>{sectionName}</h3>
-                  </Col>
-                  &nbsp;&nbsp;
-                  <Dropdown overlay={menu1} trigger={["click"]}>
-                    <Button className="quick-action-btn">
-                      Quick Action <DownOutlined />
-                    </Button>
-                  </Dropdown>{" "}
-                  &nbsp;&nbsp;
-                  <Dropdown overlay={menu} trigger={["click"]}>
-                    <Button icon={<MoreOutlined />} />
-                  </Dropdown>
-                </div>
-              ) : (
+            
+                <div>
+                 
+                      <div className="quick-actions-container">
+                        <Col lg={12} xs={10} sm={12}>
+                          <h3>{sectionName}</h3>
+                        </Col>
+                        &nbsp;&nbsp;
+                        <Dropdown overlay={menu1} trigger={["click"]}>
+                          <Button className="quick-action-btn">
+                            Quick Action <DownOutlined />
+                          </Button>
+                        </Dropdown>{" "}
+                        &nbsp;&nbsp;
+                        <Dropdown overlay={menu} trigger={["click"]}>
+                          <Button icon={<MoreOutlined />} />
+                        </Dropdown>
+                      </div>
+                    </div>
+                
+                    {isQuickActionsActive && (
                 <div className="input-container">
                   <Col lg={18} xs={24} sm={12}>
                     <Input
@@ -282,12 +320,42 @@ const DraggableSection = ({
                               <Col lg={8} xs={10} sm={12}>
                                 <Link
                                   to="/lesson"
-                                  style={{ textDecoration: "underline" }}
+                                  style={{ textDecoration: "none" }}
                                 >
                                   <h3>{lesson.name}</h3>
                                 </Link>
                               </Col>
                               <Space className="btn-container">
+                                {isPublished ? (
+                                  <Button
+                                    style={{
+                                      fontFamily: "Rajdhani",
+                                      background: "white",
+                                      border: "1px solid green",
+                                      color: "green",
+                                    }}
+                                  >
+                                    Published
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    type="default"
+                                    style={{
+                                      fontFamily: "Rajdhani",
+                                    }}
+                                    onClick={handlePublishClick}
+                                  >
+                                    Publish
+                                  </Button>
+                                )}
+                                {isAddContentVisible && (
+                                  <Button
+                                    type="default"
+                                    style={{ fontFamily: "Rajdhani" }}
+                                  >
+                                    Add Content
+                                  </Button>
+                                )}
                                 <Dropdown
                                   overlay={menu2(index)}
                                   trigger={["click"]}
@@ -376,19 +444,14 @@ const DraggableSection = ({
   );
 };
 
-const MainCurriculum = () => {
-  const initialLessons = JSON.parse(localStorage.getItem("lessons")) || []; // Instead of JSON.parse(localStorage.getItem("sections"))
-  const [lessons, setLessons] = useState(initialLessons);
-
+const MainCurriculum = ({ courseId }) => {
+  console.log("main", courseId);
+  const dispatch = useDispatch();
+  const section = useSelector((state) => state.section.sectionById);
   const [sections, setSections] = useState([]);
   const [sectionName, setSectionName] = useState("");
-  {
-    /* const [lessons, setLessons] = useState([]); */
-  }
-
-  useEffect(() => {
-    localStorage.setItem("lessons", JSON.stringify(lessons));
-  }, [lessons]);
+  const [lessons, setLessons] = useState([]);
+  const [isQuickActionsActive, setIsQuickActionsActive] = useState(false);
 
   const addSection = () => {
     const newSection = {
@@ -398,10 +461,12 @@ const MainCurriculum = () => {
         id: uuidv4(),
         lesson: lesson,
       })),
+      isQuickActionsActive: isQuickActionsActive,
     };
     setSections([...sections, newSection]);
     setSectionName("");
     setLessons([]);
+    setIsQuickActionsActive(true);
   };
 
   const removeSection = (sectionToRemove) => {
@@ -470,6 +535,18 @@ const MainCurriculum = () => {
     setSections(newSections);
   };
 
+  useEffect(() => {
+    dispatch(getSectionById(courseId));
+  }, [dispatch, courseId]);
+
+  useEffect(() => {
+    if (section.data) {
+      setSections(section.data);
+    }
+  }, [section.data]);
+
+  console.log(sections);
+
   return (
     <>
       <div className="main-curriculum">
@@ -489,7 +566,7 @@ const MainCurriculum = () => {
           <Droppable droppableId="ROOT" type="group">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {sections.map((section, sectionIndex) => (
+                {sections?.map((section, sectionIndex) => (
                   <Draggable
                     draggableId={`section-${section.id}`}
                     key={section.id}
@@ -515,7 +592,7 @@ const MainCurriculum = () => {
                           sectionIndex={sectionIndex}
                           sections={sections}
                           setSections={setSections}
-                          sectionName={section.name}
+                          sectionName={section.sectionName}
                           setSectionName={(newName) => {
                             const updatedSections = [...sections];
                             updatedSections[sectionIndex].name = newName;
@@ -525,6 +602,14 @@ const MainCurriculum = () => {
                           setLessons={(newLessons) => {
                             const updatedSections = [...sections];
                             updatedSections[sectionIndex].lessons = newLessons;
+                            setSections(updatedSections);
+                          }}
+                          courseId={courseId}
+                          isQuickActionsActive={isQuickActionsActive}
+                          setIsQuickActionsActive={(value) => {
+                            const updatedSections = [...sections];
+                            updatedSections[sectionIndex].isQuickActionsActive =
+                              value;
                             setSections(updatedSections);
                           }}
                         />
@@ -539,7 +624,7 @@ const MainCurriculum = () => {
         </DragDropContext>
         <div className="new-section">
           <Row gutter={16}>
-          <Col lg={12} xs={24} sm={12}>
+            <Col lg={12} xs={24} sm={12}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <PlusCircleOutlined
                   style={{ fontSize: "24px", marginRight: "8px" }}

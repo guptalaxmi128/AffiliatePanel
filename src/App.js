@@ -27,7 +27,9 @@ import CoursePreview from "./componets/admin/coursePreview/CoursePreview";
 import SuperLayout from "./componets/superAdmin/superLayout/SuperLayout";
 import LessonLayout from "./componets/admin/lessonLayout/LessonLayout";
 import "./App.css";
-
+import RegisterUsers from "./componets/user/register/RegisterUsers"; //for register user
+import ShowCourseTable from "./componets/admin/showCourseTable/ShowCourseTable";
+import CourseLayout from "./componets/admin/courseLayout/CourseLayout";
 
 function App() {
   return (
@@ -37,9 +39,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register-users" element={<RegisterUsers />} />{" "}
+          {/* for user register */}
           <Route path="/admin/*" element={<CreatorLayout />} />
-          <Route path="/curriculum" element={<AdminCurriculum />} />
-          <Route path="/card1" element={<MainCurriculum />} />
+          {/* <Route path="/curriculum" element={<AdminCurriculum />} /> */}
+          <Route path="/curriculum" element={<ShowCourseTable />} />
+          <Route path="get-course/courses/:courseId" element={<CourseLayout />} />
           <Route path="/allcourse" element={<CourseTable />} />
           <Route path="/add-advisor" element={<AddAdvisor />} />
           <Route path="/view-advisor" element={<ViewAdvisor />} />

@@ -1,14 +1,14 @@
 import React from "react";
 import { Form, Input, Button, Checkbox } from "antd";
-// import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/img/logo_white.png";
-import "./Signup.css";
-import { addAdmin } from "../../../actions/addAdmin/addAdmin";
+import "./RegisterUser.css";
+import { registerUser } from "../../../actions/loginUser/loginUser";
 
 
-const Signup = () => {
+
+const RegisterUsers = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const validateEmail = (rule, value) => {
@@ -28,8 +28,8 @@ const Signup = () => {
 
   const onFinish = (values) => {
     console.log("Form values:", values);
-    dispatch(addAdmin(values));
-    navigate("/admin");
+    dispatch(registerUser(values));
+    navigate("/user");
   };
   return (
     <>
@@ -40,10 +40,10 @@ const Signup = () => {
 
         <div className="signup-form-container">
           <h2>Get started with Affiliate Indians</h2>
-          <p>
+          {/* <p>
             Join more than 100,000 creators who've sold over $1 billion in
             courses and coaching.
-          </p>
+          </p> */}
 
           <Form
             layout="vertical"
@@ -127,4 +127,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default RegisterUsers;

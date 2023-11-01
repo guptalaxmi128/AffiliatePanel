@@ -55,6 +55,11 @@
   font-family: "Rajdhani", sans-serif;
 }
 
+.course-dropdown{
+  width:250px;
+  margin-right: 10px;
+}
+
 .divider {
   border-top: 1px solid #dcdcdc;
   width: 99%;
@@ -152,6 +157,11 @@ button {
     .horizontal-container {
       display: block;
     }
+
+  }
+  .course-dropdown{
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
 

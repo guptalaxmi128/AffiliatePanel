@@ -52,11 +52,14 @@ const AdminCurriculum = () => {
             
             ))}
           </Row>
+         
           <div className="curriculum-subcontainer1">
-          <h3>Buld Upload</h3>
+
+          <h3>Bulk Upload</h3>
           <p>Upload multiple files to generate your outline</p>
          
           </div>
+         
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Col, Menu } from "antd";
-import { Link, useLocation,useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   BookOutlined,
   PercentageOutlined,
@@ -12,35 +12,15 @@ import {
 } from "@ant-design/icons";
 import backgroundImage from "../../../assets/img/cube_dark.jpg";
 import logo from "../../../assets/img/logo_white.png";
-import ScheduleBookingTable from "../../scheduleBooking/scheduleBookingTable/ScheduleBookingTable";
 import MainCurriculum from "../course/curriculum/maincurriculum/MainCurriculum";
-import ScheduleCall from "../../scheduleBooking/scheduleCall/ScheduleCall";
-import AdminCurriculum from "../course/curriculum/AdminCurriculum";
-import MyBooking from "../../scheduleBooking/myBooking/MyBooking";
-import RegisterUser from "../registerUser/RegisterUser";
-import NewCourse from "../course/NewCourse";
-import AllCourse from "../courseTable/AllCourse";
-import Setup from "../setup/Setup";
-import Lead from "../lead/Lead";
-import Members from "../members/Members";
-import AddAdvisor from "../addAdvisor/AddAdvisor";
-import ViewAdvisor from "../viewAdvisor/ViewAdvisor";
-import EWallet from "../eWallet/EWallet";
-import SiteSetting from "../siteSetting/SiteSetting";
-import CoursePreview from "../coursePreview/CoursePreview";
-import Subscriber from "../subscriber/Subscriber";
-import Sequence from "../subscriber/sequence/Sequence";
-import NewSequence from "../subscriber/sequence/newSequence/NewSequence";
-import EmailContent from "../subscriber/sequence/content/EmailContent";
-import CurriculumPreview from "../curriculumPreview/CurriculumPreview";
-import ShowCourseTable from "../showCourseTable/ShowCourseTable";
 
 const { Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
-const CreatorLayout = () => {
+const CourseLayout = () => {
   const location = useLocation();
-
+  const { courseId } = useParams();
+  console.log(courseId);
 
   const carouselStyle = {
     backgroundImage: `url(${backgroundImage})`,
@@ -323,58 +303,12 @@ const CreatorLayout = () => {
             <Content
               style={{
                 padding:
-                  location.pathname !== "/admin/courses/new" &&
-                  location.pathname !== "/admin/curriculum" &&
-                  location.pathname !== "/admin/setup" &&
-                  location.pathname !== "/admin/lead" &&
-                  location.pathname !== "/admin/members" &&
-                  location.pathname !== "/admin/register-user" &&
-                  location.pathname !== "/admin/add-advisor" &&
-                  location.pathname !== "/admin/view-advisor" &&
-                  location.pathname !== "/admin/schedule-call" &&
-                  location.pathname !== "/admin/schedule-booking" &&
-                  location.pathname !== "/admin/my-booking" &&
-                  location.pathname !== "/admin/ewallet" &&
-                  location.pathname !== "/admin/site-setting" &&
-                  location.pathname !== "/admin/preview" &&
-                  location.pathname !== "/admin/subscriber" &&
-                  location.pathname !== "/admin/sequences" &&
-                  location.pathname !== "/admin/sequences/new" &&
-                  location.pathname !== "/admin/sequences/content" &&
-                  location.pathname !== "/admin/setup/courses/curriculum/lesson"
+                  location.pathname !== "/admin/courses/:courseId"
                     ? "16px"
                     : "0",
               }}
             >
-              {location.pathname === "/admin/courses/new" && <NewCourse />}
-              {/* {location.pathname === "/admin/curriculum" && <AdminCurriculum />} */}
-              {location.pathname === "/admin/curriculum" && <ShowCourseTable />}
-            
-              {location.pathname === "/admin/allcourse" && <AllCourse />}
-              {location.pathname === "/admin/setup" && <Setup />}
-              {location.pathname === "/admin/lead" && <Lead />}
-              {location.pathname === "/admin/members" && <Members />}
-              {location.pathname === "/admin/register-user" && <RegisterUser />}
-              {location.pathname === "/admin/add-advisor" && <AddAdvisor />}
-              {location.pathname === "/admin/view-advisor" && <ViewAdvisor />}
-              {location.pathname === "/admin/schedule-call" && <ScheduleCall />}
-              {location.pathname === "/admin/schedule-booking" && (
-                <ScheduleBookingTable />
-              )}
-              {location.pathname === "/admin/my-booking" && <MyBooking />}
-              {location.pathname === "/admin/ewallet" && <EWallet />}
-              {location.pathname === "/admin/site-setting" && <SiteSetting />}
-              {location.pathname === "/admin/preview" && <CoursePreview />}
-              {location.pathname === "/admin/subscriber" && <Subscriber />}
-              {location.pathname === "/admin/sequences" && <Sequence />}
-              {location.pathname === "/admin/sequences/new" && <NewSequence />}
-              {location.pathname === "/admin/sequences/content" && (
-                <EmailContent />
-              )}
-              {location.pathname ===
-                "/admin/setup/courses/curriculum/lesson" && (
-                <CurriculumPreview />
-              )}
+              <MainCurriculum courseId={courseId} />
             </Content>
             <Footer style={{ textAlign: "center" }}>
               Affiliate Indians by @ Tech Astute
@@ -386,4 +320,4 @@ const CreatorLayout = () => {
   );
 };
 
-export default CreatorLayout;
+export default CourseLayout;

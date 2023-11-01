@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table, Dropdown, Menu, Button } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import "./AllCourse.css"
+import { useSelector,useDispatch } from "react-redux";
+import { getCourse } from "../../../actions/course/course";
   
 
 const tableContentStyle = {
@@ -10,28 +12,28 @@ const tableContentStyle = {
     textAlign:'center'
   };
 
-const data = [
-  {
-    key: "1",
-    thumbnail: "Thumbnail 1",
-    courseName: "Course 1",
-    price: "₹19.99",
-    author: "Author 1",
-    creationDate: "2023-01-15",
-    enrollments: 100,
-    status: "published",
-  },
-  {
-    key: "2",
-    thumbnail: "Thumbnail 2",
-    courseName: "Course 2",
-    price: "₹29.99",
-    author: "Author 2",
-    creationDate: "2023-02-20",
-    enrollments: 75,
-    status: "unpublished",
-  },
-];
+// const data = [
+//   {
+//     key: "1",
+//     thumbnail: "Thumbnail 1",
+//     courseName: "Course 1",
+//     price: "₹19.99",
+//     author: "Author 1",
+//     creationDate: "2023-01-15",
+//     enrollments: 100,
+//     status: "published",
+//   },
+//   {
+//     key: "2",
+//     thumbnail: "Thumbnail 2",
+//     courseName: "Course 2",
+//     price: "₹29.99",
+//     author: "Author 2",
+//     creationDate: "2023-02-20",
+//     enrollments: 75,
+//     status: "unpublished",
+//   },
+// ];
 
 const StatusBadge = ({ status }) => {
   const badgeStyle = {
@@ -44,6 +46,15 @@ const StatusBadge = ({ status }) => {
   };
 
   return <span style={badgeStyle}>{status}</span>;
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1; 
+  const year = date.getFullYear();
+
+  return `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
 };
 
 const ActionMenu = () => {
@@ -86,9 +97,9 @@ const columns = [
   },
   {
     title: "Course Name",
-    dataIndex: "courseName",
-    key: "courseName",
-    render: (courseName) => <a href="/admin/setup" style={{color:'#000'}}>{courseName}</a>,
+    dataIndex: "title",
+    key: "title",
+    render: (title) => <a href="/admin/setup" style={{color:'#000'}}>{title}</a>,
     onCell: () => {
         return {
           style: tableContentStyle,
@@ -107,8 +118,8 @@ const columns = [
   },
   {
     title: "Author",
-    dataIndex: "author",
-    key: "author",
+    dataIndex: "authorName",
+    key: "authorName",
     onCell: () => {
         return {
           style: tableContentStyle,
@@ -116,14 +127,17 @@ const columns = [
       },
   },
   {
-    title: "Creation Date",
-    dataIndex: "creationDate",
-    key: "creationDate",
+    title: 'Creation Date',
+    dataIndex: 'createdAt',
+    key: 'creationDate',
+    render: (text) => (
+      <span>{formatDate(text)}</span>
+    ),
     onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
+      return {
+        style: tableContentStyle,
+      };
+    },
   },
   {
     title: "Enrollments",
@@ -165,6 +179,15 @@ const columns = [
 ];
 
 const AllCourse = () => {
+  const dispatch=useDispatch();
+  const course=useSelector((state)=>state.course.course)
+  const data=course?.data;
+  console.log(course)
+  console.log(data)
+
+  useEffect(() => {
+    dispatch(getCourse());
+  }, [dispatch]);
   return (
     <>
       <div className="all-course">

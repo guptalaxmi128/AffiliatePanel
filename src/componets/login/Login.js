@@ -1,15 +1,30 @@
 import React from "react";
-import { Form, Input, Button} from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Form, Input, Button, Select, Row, Col } from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../../assets/img/logo_white.png";
 import "./Login.css";
+import { setCurrentUserType } from "../../actions/userType/userType";
+import { loginAdmin } from "../../actions/addAdmin/addAdmin";
+import { loginUser } from "../../actions/loginUser/loginUser";
+
+const { Option } = Select;
 
 const Login = () => {
+  const navigate = useNavigate();
+  const currentUserType = useSelector((state) => state.user.currentUserType);
+  const dispatch = useDispatch();
+
+  const handleUserTypeChange = (newUserType) => {
+    dispatch(setCurrentUserType(newUserType));
+  };
+
+  const userTypes = [
+    { value: "admin", label: "Admin" },
+    { value: "user", label: "User" },
+  ];
+
   const validateEmail = (rule, value) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!value || emailRegex.test(value)) {
@@ -19,14 +34,24 @@ const Login = () => {
   };
 
   const validatePassword = (rule, value) => {
-    if (!value || value.length >= 8) {
+    if (!value || value.length === 8) {
       return Promise.resolve();
     }
-    return Promise.reject("Password must be at least 8 characters long");
+    return Promise.reject("Password must be 8 characters long");
   };
+
   const onFinish = (values) => {
     console.log("Received values:", values);
+    if (currentUserType === "admin") {
+      dispatch(loginAdmin(values));
+      navigate("/admin");
+    } else if (currentUserType === "user") {
+      dispatch(loginUser(values));
+      navigate("/user");
+    }
   };
+
+  // console.log(currentUserType)
 
   return (
     <div className="login-container">
@@ -37,11 +62,31 @@ const Login = () => {
       <div className="form-container">
         <h2>Welcome to Affiliate Indians!</h2>
         <Form
+          layout="vertical"
           name="login-form"
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >
+          <Form.Item label="Select User Type" name="userType">
+            <Row gutter={16}>
+              <Col lg={24} sm={24} xs={24}>
+                <Select
+                  placeholder="Select Option"
+                  value={currentUserType}
+                  onChange={handleUserTypeChange}
+                >
+                  {userTypes.map((type) => (
+                    <Option key={type.value} value={type.value}>
+                      {type.label}
+                    </Option>
+                  ))}
+                </Select>
+              </Col>
+            </Row>
+          </Form.Item>
+
           <Form.Item
+            label="Email"
             name="email"
             rules={[
               {
@@ -51,12 +96,11 @@ const Login = () => {
               { validator: validateEmail },
             ]}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Email"
-            />
+            <Input type="email" />
           </Form.Item>
+
           <Form.Item
+            label="Password"
             name="password"
             rules={[
               {
@@ -66,21 +110,35 @@ const Login = () => {
               { validator: validatePassword },
             ]}
           >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder="Password"
-            />
+            <Input.Password type="password" />
           </Form.Item>
+
+          {/* <Form.Item
+            label="Confirm Password"
+            name="confirmPassword"
+            rules={[
+              {
+                required: true,
+                message: "This field is required",
+              },
+              { validator: validatePassword },
+            ]}
+          >
+            <Input.Password type="password" />
+          </Form.Item> */}
+
           <div className="button-container">
-            <Link to="#" style={{textDecoration:'none',fontFamily:'Rajdhani'}}>Forget Your Password</Link>
+            <Link
+              to="#"
+              style={{ textDecoration: "none", fontFamily: "Rajdhani" }}
+            >
+              Forget Your Password
+            </Link>
 
             <Form.Item>
-            <Link to={"/user"}  style={{textDecoration:'none'}}>
               <Button className="login-btn" htmlType="submit">
                 Login Now <ArrowRightOutlined />
               </Button>
-              </Link>
             </Form.Item>
           </div>
         </Form>
