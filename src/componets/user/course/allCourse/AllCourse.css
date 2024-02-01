@@ -1,14 +1,15 @@
 .all-course-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 
 .custom-cards {
-  width: calc(25% - 16px);
+  flex: 1 0 calc(25% - 20px); 
   margin-bottom: 16px;
   box-shadow: 0 0 6px goldenrod;
+  margin-right: 10px;
 }
 
 .card-hovers:hover {
@@ -52,4 +53,9 @@
   color: goldenrod;
 }
 
+@media (min-width: 768px) {
+  .all-course-container {
+    padding: 40px; 
+  }
+}
 

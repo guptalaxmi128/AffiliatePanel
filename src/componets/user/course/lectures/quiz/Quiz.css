@@ -1,0 +1,20 @@
+.user-quiz-container{
+    padding:16px;
+}
+
+.user-quiz-subcontainer{
+    border:1px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+}
+
+.user-quiz-subcontainer h3{
+   font-family: Rajdhani,sans-serif;
+   font-size: 24px;
+}
+
+.user-quiz-subcontainer p{
+    font-family: Rajdhani,sans-serif;
+    font-size: 18px;
+ }

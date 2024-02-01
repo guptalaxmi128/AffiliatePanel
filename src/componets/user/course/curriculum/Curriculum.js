@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
@@ -6,7 +6,7 @@ import {
   faPlay,
   faChevronDown,
   faChevronUp,
-  faShare
+  faShare,
 } from "@fortawesome/free-solid-svg-icons";
 import user from "../../../../assets/user/user.jpg";
 import play from "../../../../assets/icon/play.svg";
@@ -25,12 +25,40 @@ import users from "../../../../assets/icon/users.svg";
 import videoIcon from "../../../../assets/icon/video.svg";
 import chart from "../../../../assets/icon/chart.svg";
 import icon02 from "../../../../assets/icon/icon-02.svg";
+import { useParams,Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCourseByTitle } from "../../../../actions/allCourseUser/allCourseUser";
 
 const Curriculum = () => {
+  const { courseId } = useParams();
+  const dispatch = useDispatch();
   const [isCollapsed, setCollapsed] = useState(false);
+  const [data, setData] = useState("");
+  // console.log(courseId)
 
+  const course = useSelector((state) => state.allCourseUser.courseByTitle);
+  // console.log(course);
   const toggleCollapse = () => {
     setCollapsed(!isCollapsed);
+  };
+
+  useEffect(() => {
+    if (course.data) {
+      setData(course.data);
+    }
+  }, [course.data]);
+
+  useEffect(() => {
+    if (courseId) {
+      dispatch(getCourseByTitle(courseId));
+    }
+  }, [dispatch, courseId]);
+
+  const extractCouponCode = (data) => {
+    const defaultCourse = data?.course_coupons?.find(
+      (course) => course.type === "DEFAULT"
+    );
+    return defaultCourse ? defaultCourse.coupon.couponCode : null;
   };
 
   return (
@@ -48,7 +76,7 @@ const Curriculum = () => {
                   </div>
                   <div className="instructor-detail me-3">
                     <h5>
-                      <a href="#">Prakhar Kulshrestha</a>
+                      <a href="#">{data.authorName}</a>
                     </h5>
                     <p>AFFILIATE INDIANS BUSINESS BUILDER</p>
                   </div>
@@ -80,11 +108,8 @@ const Curriculum = () => {
                 </div>
                 <span className="web-badge mb-3">AFFILIATE BUSINESS</span>
               </div>
-              <h2>The Complete Affiliate Indians business builder</h2>
-              <p>
-                Everything you need to know to start affiliate marketing
-                business in India
-              </p>
+              <h2>{data.title}</h2>
+              <p>{data.subTitle}</p>
               <div className="course-info d-flex align-items-center border-bottom-0 m-0 p-0">
                 <div className="cou-info">
                   <img src={icon01} alt />
@@ -515,9 +540,9 @@ const Curriculum = () => {
                       </div>
                       <div className="instructor-detail">
                         <h5>
-                          <a href="#">Prakhar Kulshrestha</a>
+                          <a href="#">{data.authorName}</a>
                         </h5>
-                        <p>AFFILIATE INDIANS BUSINESS BUILDER</p>
+                        <p>{data.authorDiscription}</p>
                       </div>
                     </div>
                     <div className="rating">
@@ -595,9 +620,9 @@ const Curriculum = () => {
                       </div>
                       <div className="instructor-detail">
                         <h5>
-                          <a href="#">Prakhar Kulshrestha</a>
+                          <a href="#">{data.authorName}</a>
                         </h5>
-                        <p>AFFILIATE INDIANS BUSINESS BUILDER</p>
+                        <p>{data.authorDiscription}</p>
                       </div>
                     </div>
                     <div className="rating">
@@ -726,16 +751,25 @@ const Curriculum = () => {
                           </div>
                           <div className="col-md-6">
                             <a href="#" className="btn btn-wish w-100">
-                            <FontAwesomeIcon icon={faShare} /> &nbsp; Share
+                              <FontAwesomeIcon icon={faShare} /> &nbsp; Share
                             </a>
                           </div>
                         </div>
-                        <a
-                          href="#"
+                        <Link
+                          to={{
+                            pathname: `/payment/${data.id}`,
+                          }}
+                          state={{
+                            price: data.price,
+                            couponCode: extractCouponCode(data),
+                          }}
+                         
+                          style={{ textDecoration: "none", flex: "1 1 24%" }}
+                          onClick={() => console.log("Price:", data.price)}
                           className="btn btn-enroll w-100"
                         >
                           Enroll Now
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

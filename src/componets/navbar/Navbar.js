@@ -20,6 +20,7 @@ const { SubMenu } = Menu;
 
 const Navbar = () => {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    
 
     // Function to toggle the mobile menu
     const toggleMobileMenu = () => {
@@ -29,47 +30,48 @@ const Navbar = () => {
     const menuItems = [
         {
           key: "1",
-          label: "Home",
+          label: "Login",
           icon: <DashboardOutlined />,
+          link:"/sign_in"
          
         },
+        // {
+        //   key: "2",
+        //   label: "Products",
+        //   icon: <UserOutlined />,
+        //   subMenu: [
+        //     {
+        //       key: "2.1",
+        //       label: "Sales & Marketing",
+        //       link: "#",
+        //       icon: <UserOutlined />,
+        //     },
+        //     {
+        //       key: "2.2",
+        //       label: "Support Service",
+        //       link: "#",
+        //       icon: <SettingOutlined />,
+        //     },
+        //   ],
+        // },
         {
           key: "2",
-          label: "Products",
-          icon: <UserOutlined />,
-          subMenu: [
-            {
-              key: "2.1",
-              label: "Sales & Marketing",
-              link: "#",
-              icon: <UserOutlined />,
-            },
-            {
-              key: "2.2",
-              label: "Support Service",
-              link: "#",
-              icon: <SettingOutlined />,
-            },
-          ],
-        },
-        {
-          key: "3",
           label: "Pricing",
           icon: <QuestionCircleOutlined />,
         
         },
-        {
-          key: "4",
-          label: "Creator Login",
-          icon: <PercentageOutlined />,
-          link: "/login",
-        },
-        {
-          key: "5",
-          label: "Start for Free",
-          icon: <TeamOutlined />,
-          link: "/signup",
-        },
+        // {
+        //   key: "4",
+        //   label: "Creator Login",
+        //   icon: <PercentageOutlined />,
+        //   link: "/login",
+        // },
+        // {
+        //   key: "5",
+        //   label: "Start for Free",
+        //   icon: <TeamOutlined />,
+        //   link: "/signup",
+        // },
       ];
     return (
         <>
@@ -97,18 +99,21 @@ const Navbar = () => {
                         key={item.key}
                         icon={item.icon}
                         title={item.label}
+                        
                       >
                         {item.subMenu.map((subItem) => (
                           <Menu.Item
                             key={subItem.key}
                             icon={subItem.icon}
+                            // style={{ visibility: item.label !== 'Login' ? 'hidden' : 'visible' }} 
+                             /* to hide the other menu */
                           >
                             <Link to={subItem.link}>{subItem.label}</Link>
                           </Menu.Item>
                         ))}
                       </SubMenu>
                     ) : (
-                      <Menu.Item key={item.key} icon={item.icon}>
+                      <Menu.Item key={item.key} icon={item.icon}    style={{ visibility: item.label !== 'Login' ? 'hidden' : 'visible' }}> 
                         <Link to={item.link}>{item.label}</Link>
                       </Menu.Item>
                     )
@@ -132,7 +137,7 @@ const Navbar = () => {
               <Menu theme="dark" mode="inline" inlineIndent={16}>
                 {menuItems.map((item) =>
                   item.subMenu ? (
-                    <SubMenu key={item.key} title={item.label} icon={item.icon}>
+                    <SubMenu key={item.key} title={item.label} icon={item.icon} >
                       {item.subMenu.map((subItem) => (
                         <Menu.Item key={subItem.key} icon={subItem.icon}>
                           <Link to={subItem.link}>{subItem.label}</Link>
@@ -149,9 +154,10 @@ const Navbar = () => {
             </div>
           )}
           </>
-    );
-}
-
+     
+  );
+};
+    
 
 
 export default Navbar;

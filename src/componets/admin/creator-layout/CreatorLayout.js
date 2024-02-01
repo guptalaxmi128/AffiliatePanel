@@ -1,6 +1,6 @@
 import React from "react";
-import { Layout, Col, Menu } from "antd";
-import { Link, useLocation,useParams } from "react-router-dom";
+import { Layout, Col, Menu, message } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   BookOutlined,
   PercentageOutlined,
@@ -13,9 +13,7 @@ import {
 import backgroundImage from "../../../assets/img/cube_dark.jpg";
 import logo from "../../../assets/img/logo_white.png";
 import ScheduleBookingTable from "../../scheduleBooking/scheduleBookingTable/ScheduleBookingTable";
-import MainCurriculum from "../course/curriculum/maincurriculum/MainCurriculum";
 import ScheduleCall from "../../scheduleBooking/scheduleCall/ScheduleCall";
-import AdminCurriculum from "../course/curriculum/AdminCurriculum";
 import MyBooking from "../../scheduleBooking/myBooking/MyBooking";
 import RegisterUser from "../registerUser/RegisterUser";
 import NewCourse from "../course/NewCourse";
@@ -34,13 +32,32 @@ import NewSequence from "../subscriber/sequence/newSequence/NewSequence";
 import EmailContent from "../subscriber/sequence/content/EmailContent";
 import CurriculumPreview from "../curriculumPreview/CurriculumPreview";
 import ShowCourseTable from "../showCourseTable/ShowCourseTable";
+import Pricing from "../pricing/Pricing";
+import RegistrationForm from "../registrationForm/RegistrationForm";
+import CouponCode from "../addCoupon/CouponCode";
+import { LOGOUT_ADMIN } from "../../../constants/actionTypes";
+import { useDispatch } from "react-redux";
+import Template from "../../template/Template";
+import AffiliateLink from "../affiliateLink/AffiliateLink";
+import Dashboard from "../dashboard/Dashboard";
+import AdminSaleLink from "../adminSaleLink/AdminSaleLink";
+import AddNewUser from "../registerUser/addNewUser/AddNewUser";
+import AdminUser from "../registerUser/AdminUser";
 
 const { Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 const CreatorLayout = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    dispatch({ type: LOGOUT_ADMIN });
+    console.log("Admin");
+    message.success("Admin logout successfully!");
+    navigate("/login");
+  };
 
   const carouselStyle = {
     backgroundImage: `url(${backgroundImage})`,
@@ -70,8 +87,21 @@ const CreatorLayout = () => {
         {
           key: "2.2",
           label: "List of all course",
-          link: "/admin/allcourse",
           icon: <BarsOutlined />,
+          subMenu: [
+            {
+              key: "2.2.1",
+              label: "All Courses",
+              link: "/admin/allcourse",
+              icon: <BarsOutlined />,
+            },
+            {
+              key: "2.2.2",
+              label: "Registration Form",
+              link: "/admin/form",
+              icon: <BarsOutlined />,
+            },
+          ],
         },
       ],
     },
@@ -213,7 +243,7 @@ const CreatorLayout = () => {
       key: "11",
       label: "Form",
       icon: <TeamOutlined />,
-      link: "/admin/form",
+      link: "/forms/new",
     },
     {
       key: "12",
@@ -231,9 +261,39 @@ const CreatorLayout = () => {
     },
     {
       key: "13",
+      label: "Pricing",
+      icon: <BarsOutlined />,
+      link: "/admin/pricing",
+    },
+    {
+      key: "14",
+      label: "Add Coupon",
+      icon: <BarsOutlined />,
+      link: "/admin/add-coupon",
+    },
+    {
+      key: "15",
+      label: "Add Template",
+      icon: <BarsOutlined />,
+      link: "/admin/template",
+    },
+    {
+      key: "16",
+      label: "Add Sale Link",
+      icon: <BarsOutlined />,
+      link: "/admin/add-sale-link",
+    },
+    {
+      key: "17",
+      label: "Affiliate Link Request",
+      icon: <BarsOutlined />,
+      link: "/admin/affiliate-link-request",
+    },
+    {
+      key: "18",
       label: "Logout",
       icon: <LogoutOutlined />,
-      link: "/",
+      onClick:handleLogout
     },
   ];
 
@@ -245,6 +305,41 @@ const CreatorLayout = () => {
     color: "white",
     fontFamily: "Rajdhani",
     marginTop: "10px",
+    fontSize: "16px",
+  };
+
+  const renderMenuItems = (items) => {
+    return items.map((item) => {
+      if (item.subMenu) {
+        return (
+          <SubMenu
+            key={item.key}
+            icon={item.icon}
+            title={item.label}
+            style={customMenuItemStyle}
+          >
+            {renderMenuItems(item.subMenu)}
+          </SubMenu>
+        );
+      } else {
+        return (
+          <Menu.Item
+            key={item.key}
+            icon={item.icon}
+            onClick={item.key === "18" ? item.onClick : null} 
+            style={customMenuItemStyle}
+          >
+            {item.link ? (
+              <Link to={item.link} style={{ textDecoration: "none" }}>
+                {item.label}
+              </Link>
+            ) : (
+              item.label
+            )}
+          </Menu.Item>
+        );
+      }
+    });
   };
 
   return (
@@ -274,7 +369,7 @@ const CreatorLayout = () => {
                 }}
               />
             </Col>
-            <Menu
+            {/* <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
               style={customMenuStyle}
@@ -316,6 +411,15 @@ const CreatorLayout = () => {
               )}
 
               <div className="demo-logo-vertical" />
+            </Menu> */}
+
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              style={customMenuStyle}
+            >
+              {renderMenuItems(menuItems)}
+              <div className="demo-logo-vertical" />
             </Menu>
           </Sider>
 
@@ -325,7 +429,7 @@ const CreatorLayout = () => {
                 padding:
                   location.pathname !== "/admin/courses/new" &&
                   location.pathname !== "/admin/curriculum" &&
-                  location.pathname !== "/admin/setup" &&
+                  location.pathname !== "/admin/setup/:courseId" &&
                   location.pathname !== "/admin/lead" &&
                   location.pathname !== "/admin/members" &&
                   location.pathname !== "/admin/register-user" &&
@@ -341,20 +445,31 @@ const CreatorLayout = () => {
                   location.pathname !== "/admin/sequences" &&
                   location.pathname !== "/admin/sequences/new" &&
                   location.pathname !== "/admin/sequences/content" &&
-                  location.pathname !== "/admin/setup/courses/curriculum/lesson"
-                    ? "16px"
+                  location.pathname !==
+                    "/admin/setup/courses/curriculum/lesson" &&
+                  location.pathname !== "/admin/pricing" &&
+                  location.pathname !== "/admin/add-coupon" &&
+                  location.pathname !== "/admin/author-details" &&
+                  location.pathname !== "/admin/form" &&
+                  location.pathname !== "/admin/template" &&
+                  location.pathname !== "/admin/affiliate-link-request" &&
+                  location.pathname !== "/admin/dashboard" &&
+                  location.pathname !== "/admin/add-sale-link" &&
+                  location.pathname === "/admin/add-new-user"
+                    ? "0px"
                     : "0",
               }}
             >
+             {location.pathname === "/admin/dashboard" && <Dashboard />}
               {location.pathname === "/admin/courses/new" && <NewCourse />}
               {/* {location.pathname === "/admin/curriculum" && <AdminCurriculum />} */}
               {location.pathname === "/admin/curriculum" && <ShowCourseTable />}
-            
+
               {location.pathname === "/admin/allcourse" && <AllCourse />}
-              {location.pathname === "/admin/setup" && <Setup />}
+              {location.pathname === "/admin/setup/:courseId" && <Setup />}
               {location.pathname === "/admin/lead" && <Lead />}
               {location.pathname === "/admin/members" && <Members />}
-              {location.pathname === "/admin/register-user" && <RegisterUser />}
+              {location.pathname === "/admin/register-user" && <AdminUser />}
               {location.pathname === "/admin/add-advisor" && <AddAdvisor />}
               {location.pathname === "/admin/view-advisor" && <ViewAdvisor />}
               {location.pathname === "/admin/schedule-call" && <ScheduleCall />}
@@ -375,6 +490,15 @@ const CreatorLayout = () => {
                 "/admin/setup/courses/curriculum/lesson" && (
                 <CurriculumPreview />
               )}
+              {location.pathname === "/admin/pricing" && <Pricing />}
+              {location.pathname === "/admin/add-coupon" && <CouponCode />}
+
+              {location.pathname === "/admin/form" && <RegistrationForm />}
+              {location.pathname === "/admin/template" && <Template />}
+              {location.pathname === "/admin/affiliate-link-request" && <AffiliateLink />}
+              {location.pathname === "/admin/add-sale-link" && <AdminSaleLink />}
+              {location.pathname === "/admin/add-new-user" && <AddNewUser />} 
+               {/* user table that have add new user button  */}
             </Content>
             <Footer style={{ textAlign: "center" }}>
               Affiliate Indians by @ Tech Astute

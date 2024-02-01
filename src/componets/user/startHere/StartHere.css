@@ -1,0 +1,214 @@
+.day-container {
+  padding: 20px;
+}
+
+.start-here-custom-background {
+  background-image: url("../../../assets/img/cube_dark.jpg");
+  border-radius: 5px;
+  position: relative;
+  background-size: cover;
+  /* width: 100%; */
+  height: 350px;
+  border:1px solid black;
+  background-color: #fff;
+}
+
+
+.start-here-custom-background .text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+
+.text-overlay h2 {
+  color: #fff;
+  font-family: "Rajdhani", sans-serif;
+}
+.text-overlay p {
+  color: #fff;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+}
+
+.start-here-container {
+  border: 1px solid #000;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.start-here-nested-container h2 {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  font-size: 28px;
+  font-family: "Rajdhani", sans-serif;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.start-here-nested-container .inner-sub-container {
+  background-color: #f5f4f7;
+  border: 1px solid #e7e6e8;
+  height: auto;
+  padding: 16px;
+  max-width: 100%;
+}
+
+.start-here-rank-background {
+    background-image: url("../../../assets/img/affiliate.jpg");
+    border-radius: 5px;
+    position: relative;
+    background-size: cover;
+    /* width: 100%; */
+    height: 350px;
+    border:1px solid black;
+    background-color: #fff;
+    flex: 1;
+  }
+
+.start-here-nested-container h2 {
+  margin: 0;
+}
+
+.inner-sub-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-box {
+  border: 1px solid black;
+  width: 100%;
+  background-color: #000;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80px;
+  justify-content: center;
+}
+
+.item-box .content1 {
+  font-size: 16px;
+  color: #fff;
+  margin: 5px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.item-box .content2 {
+  font-size: 18px;
+  color: #dcb52c;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.item-box1 {
+  width: 100%;
+  height: 120px;
+  margin: 20px;
+  font-size: 15px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.start-here-btn {
+  height: 40px;
+  background-color: #dcb52c;
+  color: #000 !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+.gravatar-btn{
+    height: 40px;
+    background-color: #dcb52c;
+    color: #000 !important;
+    font-size: 16px;
+    font-weight: 500;
+    width:100%;
+}
+
+.item-container {
+  margin-bottom: 20px;
+}
+
+
+
+.item-box2 {
+  width: 100%;
+  height: auto;
+  margin: 20px;
+  font-size: 15px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+@media (min-width: 768px) {
+  .rows-1 {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+ 
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .start-here-container {
+    height: auto;
+  }
+  .start-here-nested-container {
+    height: auto;
+  }
+  .item-container {
+    margin-bottom: 0;
+  }
+  .inner-sub-container {
+    display: flex;
+    flex-direction: column !important;
+    height: 430px !important;
+  }
+  
+  .item-box {
+    margin-top: 10px;
+  }
+  .item-box1 {
+    margin: 10px auto;
+  }
+  .item-box2 {
+    margin: 10px auto;
+  }
+
+  .header-container {
+    display: block;
+    margin-left: 35px;
+  }
+}
+
+@media (max-width: 767px) {
+  .start-here-custom-background {
+    background-image: url("../../../assets/img/cube_dark.jpg") !important;
+    background-size: cover;
+    margin-top: 20px;
+  }
+  .start-here-rank-background {
+    margin-top: 20px;
+  }
+  .day-container .rows-1 {
+    justify-content: center;
+    text-align: center;
+  }
+  .col-lg-8 {
+    width: 100%;
+  }
+  .col-lg-4 {
+    width: 100%;
+  }
+  .col-lg-8 iframe {
+    width: 100%;
+  }
+}

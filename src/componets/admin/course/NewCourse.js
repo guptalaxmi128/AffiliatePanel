@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Checkbox,Space } from "antd";
+import { Form, Input, Button, Checkbox, Space, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import "./NewCourse.css";
@@ -9,16 +9,24 @@ const NewCourse = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-    dispatch(addCourse(values));
-    navigate("/admin/curriculum")
+  const onFinish = async (values) => {
+    try {
+      console.log("Form values:", values);
+      const res = await dispatch(addCourse(values));
+      if (res.success) {
+        message.success(res.message);
+        navigate("/admin/curriculum");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      message.error(error.response.data.message);
+    }
   };
+
   const handleBack = () => {
     navigate(-1);
   };
 
- 
   return (
     <div className="course-container">
       <div className="content">
@@ -41,9 +49,11 @@ const NewCourse = () => {
             </Checkbox>
           </Form.Item>
           <Space>
-            <Button onClick={handleBack} className="course-back-btn">Back</Button>
+            <Button onClick={handleBack} className="course-back-btn">
+              Back
+            </Button>
             {/* <Link to={"/admin/curriculum"} style={{textDecoration:'none'}}> */}
-            <Button className="course-continue-btn"  htmlType="submit">
+            <Button className="course-continue-btn" htmlType="submit">
               Continue
             </Button>
             {/* </Link> */}

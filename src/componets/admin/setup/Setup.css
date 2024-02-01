@@ -20,6 +20,19 @@
     font-family: "Rajdhani", sans-serif;
   }
 
+  .setup-btn.published {
+    background-color: #ffffff; 
+    border: 1px solid green !important; 
+    color: green !important; 
+    font-size: 16px;
+    cursor: pointer;
+    width: 140px;
+    height: 40px;
+    border-radius: 5px;
+    padding: 2px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
   .setup-subcontainer{
     padding:10px;
   }
@@ -114,6 +127,17 @@
   .thumbnail h5{
     font-family: "Rajdhani", sans-serif;
     font-size: 18px;
+  }
+
+  .course-image-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
 

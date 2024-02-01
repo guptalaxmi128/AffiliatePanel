@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Col, Menu } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   BookOutlined,
   PercentageOutlined,
@@ -18,12 +18,15 @@ import AddQuiz from "./addQuiz/AddQuiz";
 import MediaEmbedder from "./embedMedia/MediaEmbedder";
 import AddUpsell from "./addUpsell/AddUpsell";
 import FileViewer from "./fileViewer/FileViewer";
+import AddAssignment from "./addAssignment/AddAssignment";
 
 const { Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 const LessonLayout = () => {
   const location = useLocation();
+  const { lessonId } = useParams();
+  console.log("lesson", lessonId);
   const carouselStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
@@ -38,52 +41,64 @@ const LessonLayout = () => {
       key: "1",
       label: "Add Video",
       icon: <DashboardOutlined />,
-      link: "/lesson/add-video",
+      link: `lesson/${lessonId}/add-video`,
     },
     {
       key: "2",
-      label: "Add Files",
+      label: "Add Files (PDF)",
       icon: <BookOutlined />,
-      link: "/lesson/add-files",
+      link: `lesson/${lessonId}/add-pdf-files`,
     },
 
     {
       key: "3",
       label: "Add Text",
       icon: <PercentageOutlined />,
-      link: "/lesson/add-text",
+      link: `lesson/${lessonId}/add-text`,
     },
     {
       key: "4",
       label: "Add Quiz",
       icon: <TeamOutlined />,
-      link: "/lesson/add-quiz",
+      link: `lesson/${lessonId}/add-quiz`,
     },
     {
       key: "5",
       label: "Add Code Example",
       icon: <TeamOutlined />,
-      link: "/lesson/add-code-example",
+      link: `lesson/${lessonId}/add-code-example`,
     },
 
     {
       key: "6",
-      label: "Add Custom Code",
+      label: "Add Files(doc,ppt,docx & pptx)",
       icon: <TeamOutlined />,
-      link: "/lesson/add-custom-code",
+      link: `lesson/${lessonId}/add-file`,
     },
 
     {
       key: "7",
       label: "Add Upsell",
       icon: <TeamOutlined />,
-      link: "/lesson/upsell",
+      link: `lesson/${lessonId}/add-upsell`,
     },
     {
       key: "8",
       label: "Embed Media",
       icon: <TeamOutlined />,
-      link: "/lesson/embed-media",
+      link: `lesson/${lessonId}/embed-media`,
+    },
+    {
+      key: "9",
+      label: "Add Assignment",
+      icon: <TeamOutlined />,
+      link: `lesson/${lessonId}/add-assignment`,
+    },
+    {
+      key: "10",
+      label: "Add Custom Code",
+      icon: <TeamOutlined />,
+      link: `lesson/${lessonId}/add-custom-code`,
     },
   ];
 
@@ -95,6 +110,7 @@ const LessonLayout = () => {
     color: "white",
     fontFamily: "Rajdhani",
     marginTop: "10px",
+    fontSize:'16px'
   };
 
   return (
@@ -173,20 +189,47 @@ const LessonLayout = () => {
             <Content
               style={{
                 padding:
-                  location.pathname !== "/lesson/add-video" && location.pathname !== "/lesson/add-text" && location.pathname !== "/lesson/add-files"
-                  && location.pathname !== "/lesson/add-quiz"   && location.pathname !== "/lesson/embed-media" && location.pathname !== "/lesson/upsell"? "16px" : "0",
+                  location.pathname !== `/lesson/${lessonId}/add-video` &&
+                  location.pathname !== `/lesson/${lessonId}/add-text` &&
+                  location.pathname !== `/lesson/${lessonId}/add-pdf-files` &&
+                  location.pathname !== `/lesson/${lessonId}/add-quiz` &&
+                  location.pathname !== `/lesson/${lessonId}/embed-media` &&
+                  location.pathname !== `/lesson/${lessonId}/add-upsell` &&
+                  location.pathname !== `/lesson/${lessonId}/add-file` &&
+                  location.pathname !== `/lesson/${lessonId}/add-assignment`&&
+                  location.pathname !== `/lesson/${lessonId}/add-custom-code`
+                    // ? "0px"
+                    // : "16px",
               }}
             >
               {" "}
-              {location.pathname === "/lesson/add-video" && <AddVideo />}
-              {location.pathname === "/lesson/add-text" && <AddText />}
+              {location.pathname.includes(`/lesson/${lessonId}/add-video`) && (
+                <AddVideo lessonId={lessonId} />
+              )}
+              {location.pathname.includes(`/lesson/${lessonId}/add-pdf-files`) && (
+                <FileViewer lessonId={lessonId} />
+              )}
+              {location.pathname.includes(`/lesson/${lessonId}/add-text`) && (
+                <AddText lessonId={lessonId} />
+              )}
               {/* {location.pathname === "/lesson/add-files" && <AddFiles />} */}
-              {location.pathname === "/lesson/add-files" && <FileViewer />} 
-              {location.pathname === "/lesson/add-quiz" && <AddQuiz />}
-              {location.pathname === "/lesson/embed-media" && <MediaEmbedder />}
-              {location.pathname === "/lesson/upsell" && <AddUpsell />}
+              {location.pathname.includes(`/lesson/${lessonId}/add-quiz`) && (
+                <AddQuiz  lessonId={lessonId} />
+              )}
+              {location.pathname.includes(
+                `/lesson/${lessonId}/embed-media`
+              ) && <MediaEmbedder />}
+              {location.pathname.includes(`/lesson/${lessonId}/add-upsell`) && (
+                <AddUpsell  lessonId={lessonId} />
+              )}
+              {location.pathname.includes(`/lesson/${lessonId}/add-file`) && (
+                <AddFiles lessonId={lessonId} />
+              )}
+              {location.pathname.includes(`/lesson/${lessonId}/add-assignment`) && (
+                <AddAssignment lessonId={lessonId} />
+              )}
             </Content>
-            <Footer style={{ textAlign: "center" }}>
+            <Footer style={{ textAlign: "center",fontFamily:'Rajdhani' }}>
               Affiliate Indians by @ Tech Astute
             </Footer>
           </Layout>

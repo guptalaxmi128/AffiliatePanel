@@ -1,5 +1,19 @@
-import React, { useState } from "react";
-import { Space, Button, Upload, Row, Col, Image, Menu, Dropdown } from "antd";
+import React, { useState, useEffect } from "react";
+import {
+  Space,
+  Button,
+  Upload,
+  Row,
+  Col,
+  Image,
+  Menu,
+  Dropdown,
+  message,
+  Progress,
+  Tabs,
+  Form,
+  Input,
+} from "antd";
 import {
   EllipsisOutlined,
   InboxOutlined,
@@ -7,41 +21,37 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import "./AddVideo.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+  addEmbedVideo,
+  addVideo,
+  addVideoThumbnail,
+} from "../../../../actions/addVideo/addVideo";
+import { useDispatch, useSelector } from "react-redux";
+import { getLessonById } from "../../../../actions/lesson/lesson";
 
-const AddVideo = () => {
+const { TabPane } = Tabs;
+
+const AddVideo = ({ lessonId }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const lessons = useSelector((state) => state.lesson.lessonById);
   const [imageURL, setImageURL] = useState(null);
   const [lesson, setLesson] = useState("");
-  const [fileList, setFileList] = useState([]);
-  const [videoUrl, setVideoUrl] = useState(
-    "https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
-  );
+  const [videoUrl, setVideoUrl] = useState("");
+  const [isVideoSelected, setIsVideoSelected] = useState(false);
+  const [videoName, setVideoName] = useState("");
+  const [showName, setShowName] = useState("");
+  const [image, setImage] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("addVideo");
+  const [embedVideoUrl, setEmbedVideoUrl] = useState("");
+  const [embedVideoName, setEmbedVideoName] = useState("");
 
-  const onFileChange = (info) => {
-    setFileList(info.fileList);
-    if (info.file.status === "done") {
-      if (info.file.response && info.file.response.url) {
-        // setVideoUrl(info.file.response.url);
-      } else {
-        console.error("No URL found in the response.");
-      }
-    }
-  };
+  const [form] = Form.useForm();
 
-  const beforeUpload = (file) => {
-    const isImage = file.type.startsWith("image/");
-    if (!isImage) {
-      console.log("You can only upload image files!");
-    }
-    return isImage;
-  };
-
-  const customRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      const imageUrl = URL.createObjectURL(file);
-      setImageURL(imageUrl);
-      onSuccess("ok");
-    }, 0);
+  const handleTabChange = (key) => {
+    setSelectedTab(key);
   };
 
   const handleRename = () => {
@@ -51,9 +61,74 @@ const AddVideo = () => {
     }
   };
 
+  const beforeUploadImage = (file) => {
+    setImageURL(URL.createObjectURL(file));
+    setImage(file);
+    return false;
+  };
+
   const handleDuplicate = () => {};
 
   const handleDelete = () => {};
+
+  const beforeUpload = (file) => {
+    const isVideo = file.type.startsWith("video/");
+    if (!isVideo) {
+      message.error("You can only upload video files!");
+    } else {
+      setVideoUrl(URL.createObjectURL(file));
+      setVideoName(file);
+      setShowName(file.name);
+      setIsVideoSelected(true);
+    }
+    return isVideo;
+  };
+
+  const handleVideoUpload = async () => {
+    if (!isVideoSelected) {
+      message.error("No video selected.");
+      return;
+    }
+
+    const intervalId = setInterval(async () => {
+      setUploadProgress((prevProgress) => {
+        const newProgress = prevProgress + 5; // Increase progress by 5%
+        if (newProgress >= 100) {
+          clearInterval(intervalId);
+          return 100; // Ensure progress doesn't exceed 100%
+        }
+        return newProgress;
+      });
+    }, 500); // Simulate progress update every 500 milliseconds
+
+    // Simulate stopping the upload after some time (e.g., 10 seconds)
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    clearInterval(intervalId);
+
+    const formData = new FormData();
+    formData.append("lessonId", lessonId);
+    formData.append("lessonVideo", videoName);
+
+    try {
+      const res = await dispatch(addVideo(formData));
+      if (res.success) {
+        message.success(res.message);
+      }
+    } catch (error) {
+      console.error("Video upload error:", error);
+      message.error("Video upload failed.");
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getLessonById(lessonId));
+  }, [dispatch, lessonId]);
+
+  useEffect(() => {
+    if (lessons) {
+      setLesson(lessons?.data?.lessonName);
+    }
+  }, [lessons]);
 
   const menu = (
     <Menu>
@@ -70,6 +145,54 @@ const AddVideo = () => {
       </Menu.Item>
     </Menu>
   );
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handleUpload = () => {
+    if (imageURL) {
+      const formData = new FormData();
+      formData.append("id", lessonId);
+      formData.append("thumbnail", image);
+      dispatch(addVideoThumbnail(formData));
+
+      message.success("Image uploaded successfully.");
+    } else {
+      message.error("No image selected. Please select an image.");
+    }
+  };
+
+  const handleEmbedVideoSubmit = async () => {
+    try {
+      if (!embedVideoUrl) {
+        throw new Error("Please enter a embed code");
+      }
+      if (!embedVideoName) {
+        throw new Error("Please enter a valid video Name");
+      }
+
+      const data = {
+        lessonId: lessonId,
+        videoName: embedVideoName,
+        embeddedCode: embedVideoUrl,
+      };
+      console.log(data);
+      const res = await dispatch(addEmbedVideo(data));
+      console.log(res);
+      if (res.success) {
+        message.success(res.message);
+        form.resetFields();
+        setEmbedVideoUrl("");
+        setEmbedVideoName("");
+      }
+    } catch (error) {
+      // Handle errors here
+      console.error("Embed Video Submission Error:", error);
+      message.error("An error occurred while submitting the embed video.");
+    }
+  };
+
   return (
     <>
       <div className="add-video-breadcrumb">
@@ -81,10 +204,10 @@ const AddVideo = () => {
               padding: 0,
               margin: 0,
             }}
+            onClick={handleGoBack}
           >
-            <Link to={"/admin/card1"}>
-              <LeftOutlined style={{fontSize:'14px'}} /> &nbsp; Back to lesson layout
-            </Link>
+            <LeftOutlined style={{ fontSize: "14px" }} /> &nbsp; Back to lesson
+            layout
           </p>
 
           <Space>
@@ -96,98 +219,194 @@ const AddVideo = () => {
       <div className="add-video-container">
         <h2>Video Uploader</h2>
         <p> Use the video uploader to upload videos into your lesson.</p>
+        <div className="add-select-subcontainer">
+          <Space>
+            <Tabs activeKey={selectedTab} onChange={handleTabChange}>
+              <TabPane tab="Add Video" key="addVideo"></TabPane>
+              <TabPane tab="Embed Video" key="embedVideo"></TabPane>
+            </Tabs>
+          </Space>
 
-        <Row gutter={16}>
-          <Col lg={14} sm={24} xs={24}>
-            <div className="add-video">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h2>Lesson 1</h2>
-                <Dropdown overlay={menu} trigger={["click"]}>
-                  <Button icon={<EllipsisOutlined />} />
-                </Dropdown>
-              </div>
-              <div className="add-video-subcontainer">
-                {!videoUrl ? (
-                  <Upload
-                    fileList={fileList}
-                    onChange={onFileChange}
-                    customRequest={({ file, onSuccess }) => {
-                      setTimeout(() => {
-                        onSuccess("ok");
-                      }, 0);
-                    }}
-                    accept=".mp4"
+          {selectedTab === "addVideo" && (
+            <Row gutter={16}>
+              <Col lg={14} sm={24} xs={24}>
+                <div className="add-video">
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <div style={{ textAlign: "center" }}>
-                      <InboxOutlined
-                        style={{ color: "#ddb42c", fontSize: "32px" }}
-                      />
-                      <p>Select files to upload</p>
+                    <h2>{lesson}</h2>
+                    <Dropdown overlay={menu} trigger={["click"]}>
+                      <Button icon={<EllipsisOutlined />} />
+                    </Dropdown>
+                  </div>
+                  <div className="add-video-subcontainer">
+                    <div>
+                      {!videoUrl ? (
+                        <>
+                          <Upload beforeUpload={beforeUpload} accept="">
+                            <div style={{ textAlign: "center" }}>
+                              <InboxOutlined
+                                style={{ color: "#ddb42c", fontSize: "32px" }}
+                              />
+                              <p>Select files to upload</p>
+                            </div>
+                          </Upload>
+                        </>
+                      ) : (
+                        <div>
+                          <div style={{ textAlign: "center" }}>
+                            <iframe
+                              width="400"
+                              height="240"
+                              src={videoUrl}
+                              title="Video"
+                              frameBorder="0"
+                              allowFullScreen
+                            ></iframe>
+                            <p
+                              style={{
+                                fontFamily: "Rajdhani",
+                                fontSize: "16px",
+                              }}
+                            >
+                              {showName}
+                              <Progress
+                                percent={uploadProgress}
+                                status="active"
+                              />
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {isVideoSelected ? (
+                        <div>
+                          <Button
+                            className="add-video-btn"
+                            onClick={handleVideoUpload}
+                            style={{ fontFamily: "Rajdhani" }}
+                          >
+                            Upload Video
+                          </Button>
+                        </div>
+                      ) : null}
                     </div>
-                  </Upload>
-                ) : (
-                  <>
-                    <div style={{ textAlign: "center" }}>
-                      <iframe
-                        width="400"
-                        height="240"
-                        src={videoUrl}
-                        title="Video"
-                        frameBorder="0"
-                        allowFullScreen
-                      ></iframe>
-                      {/* <p style={{ fontFamily: "Rajdhani" }}>
-                    {fileList.length > 0 ? fileList[0].name : ""}
-                  </p> */}
-                      <p style={{ fontFamily: "Rajdhani", fontSize: "16px" }}>
-                        Flonnect_2023-06-24_58e34f15-19da-4f6a-9a6f-79c505f94c41.mp4
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </Col>
-          <Col lg={10} xs={24} sm={24}>
-            <div className="video-setting">
-              <h2>Video Settings</h2>
-              <div className="scrollable-container">
-                <h2>File Name</h2>
-                <p>
-                  Flonnect_2023-06-24_58e34f15-19da-4f6a-9a6f-79c505f94c41.mp4
-                </p>
-                <h2>Thumbnail</h2>
-                <Upload
-                  beforeUpload={beforeUpload}
-                  customRequest={customRequest}
-                  showUploadList={false}
-                  accept="image/*"
+                  </div>
+                </div>
+              </Col>
+              <Col lg={10} xs={24} sm={24}>
+                <div className="video-setting">
+                  <h2>Video Settings</h2>
+                  <div className="scrollable-container">
+                    {showName && (
+                      <>
+                        {" "}
+                        <h2>File Name</h2>
+                        <p>{showName}</p>
+                      </>
+                    )}
+
+                    <h2>Thumbnail</h2>
+                    <Upload
+                      beforeUpload={beforeUploadImage}
+                      // customRequest={customRequest}
+                      showUploadList={false}
+                      accept="image/*"
+                    >
+                      {imageURL ? (
+                        <div style={{ width: "90%", height: "100%" }}>
+                          <Image
+                            src={imageURL}
+                            alt="Uploaded Thumbnail"
+                            style={{
+                              width: "50%",
+                              height: "50%",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <Space>
+                            <Button className="replace-thumbnail">
+                              Replace Thumbnail
+                            </Button>
+                          </Space>
+                        </div>
+                      ) : (
+                        <div className="upload-thumbnail">
+                          <PlusCircleOutlined /> &nbsp; Upload Thumbnail
+                        </div>
+                      )}
+                    </Upload>
+                    <Button
+                      key="upload"
+                      // className="course-image-btn"
+                      style={{ margin: "10px" }}
+                      onClick={handleUpload}
+                    >
+                      Upload
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          )}
+          {selectedTab === "embedVideo" && (
+          
+              <Form
+                form={form}
+            name="myForm"
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
+                onFinish={handleEmbedVideoSubmit}
+              >
+                <Row gutter={16}>
+                <Col lg={12} sm={24} xs={24}>
+                <Form.Item
+                  label="Video Name"
+                  name="videoName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the video name",
+                    },
+                  ]}
                 >
-                  {imageURL ? (
-                    <div style={{ width: "90%", height: "100%" }}>
-                      <Image
-                        src={imageURL}
-                        alt="Uploaded Thumbnail"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <Button className="replace-thumbnail">
-                        Replace Thumbnail
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="upload-thumbnail">
-                      <PlusCircleOutlined /> &nbsp; Upload Thumbnail
-                    </div>
-                  )}
-                </Upload>
-              </div>
-            </div>
-          </Col>
-        </Row>
+                  <Input
+                    value={embedVideoName}
+                    onChange={(e) => setEmbedVideoName(e.target.value)}
+                  />
+                </Form.Item>
+                </Col>
+                <Col lg={12} sm={24} xs={24}>
+                <Form.Item
+                  label="Embed Code"
+                  name="embedCode"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the embed code",
+                    },
+                  ]}
+                >
+                  <Input
+                    value={embedVideoUrl}
+                    onChange={(e) => setEmbedVideoUrl(e.target.value)}
+                  />
+                </Form.Item>
+                </Col>
+                </Row>
+                <Form.Item>
+                  <Button
+                    className="add-video-btn"
+                    htmlType="submit"
+                    style={{ fontFamily: "Rajdhani" }}
+                  >
+                    Embed Video
+                  </Button>
+                </Form.Item>
+              </Form>
+          
+          )}
+        </div>
       </div>
     </>
   );

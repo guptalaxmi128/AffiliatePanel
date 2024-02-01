@@ -1,7 +1,10 @@
-import React from "react";
-import { Breadcrumb ,Table} from "antd";
+import React,{ useState,useEffect} from "react";
+import { Breadcrumb ,Table,Input} from "antd";
 import { HomeOutlined } from "@ant-design/icons";
+import { useDispatch,useSelector } from "react-redux";
+import moment from "moment";
 import "./Booking.css";
+import { getScheduleBooking } from "../../../actions/scheduleCall/scheduleCall";
 
 
 const tableContentStyle = {
@@ -9,31 +12,14 @@ const tableContentStyle = {
     textAlign:'center'
   };
 
-const dataSource = [
-    {
-      key: '1',
-      SNo: 1,
-      Name: 'John Doe',
-      Date: '2023-10-16',
-      Timing: '10:00 AM-11:00 AM',
-      AdvisorName: 'Prakhar Kulshrestha',
-    },
-    {
-      key: '2',
-      SNo: 2,
-      Name: 'Jane Smith',
-      Date: '2023-10-17',
-      Timing: '02:30 PM-4:00 PM',
-      AdvisorName: 'Prakhar Kulshrestha',
-    },
-    
-  ];
-  
+  const { Search } = Input;
+
   const columns = [
     {
-      title: 'SNo',
-      dataIndex: 'SNo',
-      key: 'SNo',
+      title: "SNo",
+      dataIndex: "key",
+      key: "SNo",
+      render: (index) => index,
       onCell: () => {
         return {
           style: tableContentStyle,
@@ -41,9 +27,10 @@ const dataSource = [
       },
     },
     {
-      title: 'Name',
-      dataIndex: 'Name',
-      key: 'Name',
+      title: "User Name",
+      dataIndex: "userName",
+      key: "userName",
+      render: (text) => (text ? text : "-"),
       onCell: () => {
         return {
           style: tableContentStyle,
@@ -51,9 +38,10 @@ const dataSource = [
       },
     },
     {
-      title: 'Date',
-      dataIndex: 'Date',
-      key: 'Date',
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (text) => moment(text).format("DD-MM-YYYY"), 
       onCell: () => {
         return {
           style: tableContentStyle,
@@ -61,9 +49,9 @@ const dataSource = [
       },
     },
     {
-      title: 'Timing',
-      dataIndex: 'Timing',
-      key: 'Timing',
+      title: "Timing",
+      dataIndex: "timing",
+      key: "timing",
       onCell: () => {
         return {
           style: tableContentStyle,
@@ -71,9 +59,10 @@ const dataSource = [
       },
     },
     {
-      title: 'Advisor Name',
-      dataIndex: 'AdvisorName',
-      key: 'AdvisorName',
+      title: "Advisor Name",
+      dataIndex: "AdvisorName",
+      key: "AdvisorName",
+      render: (text) => (text ? text : "-"),
       onCell: () => {
         return {
           style: tableContentStyle,
@@ -82,6 +71,31 @@ const dataSource = [
     },
   ];
 const ScheduleBookingTable = () => {
+  const dispatch = useDispatch();
+  const booking = useSelector((state) => state.scheduleCall.scheduleCall);
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [searchedDate, setSearchedDate] = useState(null);
+  console.log(booking)
+
+  const handleSearch = (value) => {
+    setSearchedDate(value);
+    dispatch(getScheduleBooking(value));
+  };
+
+  useEffect(() => {
+    filterData();
+  }, [booking]);
+
+  const filterData = () => {
+    const filteredData = booking?.data?.filter(
+      (record) => record.date === searchedDate && record.bookingStatus === "BOOKED"
+    );
+    const filteredDataWithKey = filteredData?.map((record, index) => ({
+      ...record,
+      key: index + 1,
+    }));
+    setFilteredDataSource(filteredDataWithKey);
+  };
   return (
     <>
       <div className="booking-breadcrumb">
@@ -109,9 +123,16 @@ const ScheduleBookingTable = () => {
       <div className="booking-container">
         <div className="booking-subcontainer">
           <h2>Schedule Booking</h2>
-          <div style={{ overflowX: 'auto' }}>
-          <Table dataSource={dataSource} columns={columns} />
-          </div>
+          <Search
+            placeholder="Search by Date (2023-12-01)"
+            onSearch={handleSearch}
+            style={{ marginBottom: 16 }}
+          />
+          {filteredDataSource?.length > 0 && ( 
+            <div style={{ overflowX: "auto" }}>
+              <Table dataSource={filteredDataSource} columns={columns} />
+            </div>
+          )}
         </div>
       </div>
     </>

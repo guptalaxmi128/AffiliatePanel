@@ -1,6 +1,5 @@
-import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
-// import { Link } from "react-router-dom";
+import React,{ useState} from "react";
+import { Form, Input, Button, Checkbox,message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/img/logo_white.png";
@@ -9,6 +8,8 @@ import { addAdmin } from "../../../actions/addAdmin/addAdmin";
 
 
 const Signup = () => {
+  const [loading,setLoading]=useState(false);
+  const [termAndConditionAccepted,setTermAndConditionAccepted]=useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const validateEmail = (rule, value) => {
@@ -20,17 +21,44 @@ const Signup = () => {
   };
 
   const validatePassword = (rule, value) => {
-    if (!value || value.length === 8) { 
-      return Promise.resolve();
+    if (!value || value.length >= 8) {
+      return Promise.resolve(); 
     }
-    return Promise.reject("Password must be equal to 8 characters long"); 
+    return Promise.reject("Password must be at least 8 characters long");
   };
 
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-    dispatch(addAdmin(values));
-    navigate("/admin");
+  const onFinish = async (values) => {
+    try {
+      if (!termAndConditionAccepted) {
+        message.warning('Please accept the terms and conditions');
+        return;
+      }
+      setLoading(true);
+      const payload = {
+        ...values,
+        termAndConditionAccepted,
+      };
+      const response = await dispatch(addAdmin(payload));
+      console.log("Admin Add Response:", response);
+      
+      if (response.success) {
+        navigate("/admin");
+        message.success('Admin added successfully');
+      }
+    } catch (error) {
+      console.error("Error adding admin:", error);
+      message.error('An error occurred while adding admin');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  
+  
+  
+  
+  
+  
   return (
     <>
       <div className="signup-container">
@@ -104,18 +132,18 @@ const Signup = () => {
               <Input.Password type="password" />
             </Form.Item>
             <Form.Item>
-              <Checkbox className="custom-checkbox">
+              <Checkbox className="custom-checkbox"   onChange={(e) => setTermAndConditionAccepted(e.target.checked)} >
                 I agree to the <a href="/terms">Terms</a> and{" "}
                 <a href="/privacy">Privacy Policy</a>
               </Checkbox>
             </Form.Item>
 
             <Form.Item>
-              {/* <Link to={"#"} style={{ textDecoration: "none" }}> */}
-                <Button className="signup-btn" htmlType="submit">
-                  Create Account
+             
+                <Button className="signup-btn" htmlType="submit" loading={loading}>
+                {loading ? 'Creating Account' : 'Create Account'}
                 </Button>
-              {/* </Link> */}
+            
             </Form.Item>
           </Form>
           <p>

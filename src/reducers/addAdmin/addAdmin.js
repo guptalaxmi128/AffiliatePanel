@@ -29,6 +29,13 @@ const addAdminReducer = (state = { ...initialState, adminlogin: initialProfile }
                 adminlogin: action.payload,
                 isAuthenticated: true,
             };
+            case actionTypes.LOGOUT_ADMIN:
+                localStorage.removeItem('profile');
+                return {
+                    ...state,
+                    adminlogin: null,
+                    isAuthenticated: false,
+                };
         default:
             return state;
     }

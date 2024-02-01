@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Layout, Row, Col, Space, Menu, Button } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Layout, Row, Col, Space, Menu, Button, message } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MenuOutlined,
   UserOutlined,
@@ -10,21 +10,37 @@ import {
   PercentageOutlined,
   TeamOutlined,
   BarsOutlined,
+  DashboardOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import backgroundImage from "../../assets/img/cube_dark.jpg";
 import logo from "../../assets/img/logo_white.png";
 import AllCourse from "../user/course/allCourse/AllCourse";
 import MyCourse from "../user/course/MyCourse";
 import Curriculum from "../user/course/curriculum/Curriculum";
-import Lectures from "../user/course/lectures/Lectures";
 import Profile from "../user/profile/Profile";
 import FAQ from "../user/faq/FAQ";
+import AffiliateBluePrint from "../user/affiliateBluePrint/AffiliateBluePrint";
+import { LOGOUT_USER } from "../../constants/actionTypes";
+import { useDispatch } from "react-redux";
+import StartHere from "../user/startHere/StartHere";
+import EWallet from "../user/eWallet/EWallet";
+import Leads from "../user/leads/Leads";
+import Members from "../user/members/Members";
+import Reports from "../user/reports/Reports";
+import Rank from "../user/rank/Rank";
+import Commission from "../user/commission/Commission";
+import Stream from "../user/stream/Stream";
+import Traffic from "../user/traffic/Traffic";
+import LeaderBoard from "../user/leaderBoard/LeaderBoard";
 
 const { Header, Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 const MyLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const carouselStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
@@ -34,11 +50,17 @@ const MyLayout = () => {
 
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
   // console.log(location.pathname);
+
+  const handleLogout = () => {
+    dispatch({ type: LOGOUT_USER });
+    // console.log("User");
+    message.success("User logout successfully!");
+    navigate("/sign_in");
+  };
 
   const menuItems = [
     {
@@ -71,12 +93,12 @@ const MyLayout = () => {
           link: "/user/profile",
           icon: <UserOutlined />,
         },
-        {
-          key: "2.2",
-          label: "Settings",
-          link: "/settings",
-          icon: <SettingOutlined />,
-        },
+        // {
+        //   key: "2.2",
+        //   label: "Settings",
+        //   link: "/settings",
+        //   icon: <SettingOutlined />,
+        // },
       ],
     },
     {
@@ -102,15 +124,109 @@ const MyLayout = () => {
       key: "4",
       label: "Affiliate",
       icon: <PercentageOutlined />,
-      link: "/affiliate",
+      // link: "/user/start-here",
+    },
+    // {
+    //   key: "5",
+    //   label: "My Advisor",
+    //   icon: <TeamOutlined />,
+    //   link: "/my-advisor",
+    // },
+    {
+      key: "5",
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      onClick: handleLogout,
+    },
+  ];
+
+  const menuSliderItems = [
+    {
+      key: "1",
+      label: "Start Here",
+      icon: <DashboardOutlined />,
+      link: "/user/start-here",
+    },
+    {
+      key: "2",
+      label: "eWallet",
+      icon: <BookOutlined />,
+      link: "/user/eWallet",
+    },
+
+    {
+      key: "3",
+      label: "Affiliate Links",
+      icon: <PercentageOutlined />,
+      link: "/user/affiliate-indians-blueprint",
+    },
+    {
+      key: "4",
+      label: "Leads",
+      icon: <TeamOutlined />,
+      link: "/user/leads",
     },
     {
       key: "5",
-      label: "My Advisor",
+      label: "Members",
       icon: <TeamOutlined />,
-      link: "/my-advisor",
+      link: "/user/members",
+    },
+    {
+      key: "6",
+      label: "Reports",
+      icon: <BookOutlined />,
+      link: "/user/reports",
+    },
+
+    {
+      key: "7",
+      label: "Rank",
+      icon: <BookOutlined />,
+      link: "/user/rank",
+    },
+    {
+      key: "8",
+      label: "Leaderboard",
+      icon: <TeamOutlined />,
+      link: "/user/leaderboard",
+    },
+    {
+      key: "9",
+      label: "Commission",
+      icon: <TeamOutlined />,
+      link: "/user/commission",
+    },
+    {
+      key: "10",
+      label: "[PRO] Streams of Income",
+      icon: <TeamOutlined />,
+      link: "/user/stream-income",
+    },
+    {
+      key: "11",
+      label: "[PRO] Get Traffic",
+      icon: <TeamOutlined />,
+      link: "/user/get-traffic",
+    },
+    {
+      key: "12",
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      onClick: handleLogout,
     },
   ];
+
+  const customMenuStyle = {
+    background: "transparent",
+  };
+
+  const customMenuItemStyle = {
+    color: "white",
+    fontFamily: "Rajdhani",
+    marginTop: "10px",
+    fontSize: "16px",
+  };
 
   return (
     <div className="layout-container">
@@ -152,7 +268,11 @@ const MyLayout = () => {
                           ))}
                         </SubMenu>
                       ) : (
-                        <Menu.Item key={item.key} icon={item.icon}>
+                        <Menu.Item
+                          key={item.key}
+                          icon={item.icon}
+                          onClick={item.key === "5" ? item.onClick : null}
+                        >
                           <Link to={item.link}>{item.label}</Link>
                         </Menu.Item>
                       )
@@ -191,7 +311,26 @@ const MyLayout = () => {
                 width={260}
                 style={carouselStyle}
               >
-                <div className="demo-logo-vertical" />
+                <Menu
+                  mode="inline"
+                  defaultSelectedKeys={["1"]}
+                  style={customMenuStyle}
+                >
+                  {menuSliderItems.map((item) => (
+                    <Menu.Item
+                      key={item.key}
+                      icon={item.icon}
+                      style={customMenuItemStyle}
+                      onClick={item.key === "12" ? item.onClick : null} //for side bar logout
+                    >
+                      <Link to={item.link} style={{ textDecoration: "none" }}>
+                        {item.label}
+                      </Link>
+                    </Menu.Item>
+                  ))}
+
+                  <div className="demo-logo-vertical" />
+                </Menu>
               </Sider>
             )}
           {showMobileMenu && (
@@ -207,7 +346,11 @@ const MyLayout = () => {
                       ))}
                     </SubMenu>
                   ) : (
-                    <Menu.Item key={item.key} icon={item.icon}>
+                    <Menu.Item
+                      key={item.key}
+                      icon={item.icon}
+                      onClick={item.key === "5" ? item.onClick : null}
+                    >
                       <Link to={item.link}>{item.label}</Link>
                     </Menu.Item>
                   )
@@ -220,9 +363,19 @@ const MyLayout = () => {
               style={{
                 padding:
                   location.pathname !== "/user/enrolled/:id" &&
-                  location.pathname !== "/user/lecture" &&
                   location.pathname !== "/user/profile" &&
-                  location.pathname !== "/user/faq"
+                  location.pathname !== "/user/faq" &&
+                  location.pathname !== "/user/affiliate-indians-blueprint" &&
+                  location.pathname !== "/user/start-here" &&
+                  location.pathname !== "/user/eWallet" &&
+                  location.pathname !== "/user/leads" &&
+                  location.pathname !== "/user/members" &&
+                  location.pathname !== "/user/reports" &&
+                  location.pathname !== "/user/rank" &&
+                  location.pathname !== "/user/commission" &&
+                  location.pathname !== "/user/stream-income" &&
+                  location.pathname !== "/user/get-traffic" && 
+                  location.pathname !== "/user/leaderboard" 
                     ? "16px"
                     : "0",
               }}
@@ -230,11 +383,23 @@ const MyLayout = () => {
               {location.pathname === "/user/my-courses" && <MyCourse />}
               {location.pathname === "/user/all-courses" && <AllCourse />}
               {location.pathname === "/user/enrolled/:id" && <Curriculum />}
-              {location.pathname === "/user/lecture" && <Lectures />}
               {location.pathname === "/user/profile" && <Profile />}
               {location.pathname === "/user/faq" && <FAQ />}
+              {location.pathname === "/user/affiliate-indians-blueprint" && (
+                <AffiliateBluePrint />
+              )}
+              {location.pathname === "/user/start-here" && <StartHere />}
+              {location.pathname === "/user/eWallet" && <EWallet />}
+              {location.pathname === "/user/leads" && <Leads />}
+              {location.pathname === "/user/members" && <Members />}
+              {location.pathname === "/user/reports" && <Reports />}
+              {location.pathname === "/user/rank" && <Rank />}
+              {location.pathname === "/user/commission" && <Commission />}
+              {location.pathname === "/user/stream-income" && <Stream />}
+              {location.pathname === "/user/get-traffic" && <Traffic />}
+              {location.pathname === "/user/leaderboard" && <LeaderBoard />}
             </Content>
-            <Footer style={{ textAlign: "center" }}>
+            <Footer style={{ textAlign: "center", fontFamily: "Rajdhani" }}>
               Affiliate Indians by @ Tech Astute
             </Footer>
           </Layout>

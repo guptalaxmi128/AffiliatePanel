@@ -1,0 +1,114 @@
+.leads-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  
+  .leads-container {
+    padding: 20px;
+  }
+  
+  .leads-subcontainer0 {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .leads-subcontainer1 {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #fff;
+    margin-left: 20px;
+  }
+  
+  .leads-container h2 {
+    font-size: 26px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .leads-background {
+    background-image: url("../../../assets/img/cube_dark.jpg");
+    border-radius: 5px;
+    position: relative;
+    background-size: cover;
+    width: 100%;
+    height: 400px;
+  }
+  
+  .leads-background .text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+  }
+  .leads-background .text-overlay h2 {
+    color: #fff;
+    font-family: "Rajdhani", sans-serif;
+  }
+  .leads-background .text-overlay p {
+    color: #fff;
+    font-family: "Rajdhani", sans-serif;
+    font-size: 20px;
+  }
+  
+  .leads-custom-container {
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .leads-nested-container h2 {
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    font-size: 28px;
+    font-family: "Rajdhani", sans-serif;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+  
+  .leads-nested-container .inner-sub-container {
+    background-color: #f5f4f7;
+    border: 1px solid #e7e6e8;
+    height: auto;
+    padding: 16px;
+    max-width: 100%;
+  }
+  
+  .inner-sub-container {
+    display: flex;
+    flex-direction: column; 
+   
+  }
+  
+  .leads-nested-container h2 {
+    margin: 0;
+    text-align: center;
+  }
+  
+  
+  .rank-img {
+    width: 100%;
+    height: 398px;
+  }
+  
+  .leads-breadcrumb0 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  @media (max-width: 768px) {
+    .leads-breadcrumb0 {
+      display: flex;
+      flex-direction: column;
+    }
+    .leads-subcontainer1 {
+      margin-left: 0px;
+      margin-top: 20px;
+    }
+  }
+  

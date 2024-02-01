@@ -118,6 +118,16 @@
   font-weight: bold;
 }
 
+.booking-btn {
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: #dcb52c;
+  color: #000 !important;
+  font-size: 14px;
+  border-radius: 20px;
+}
+
 .call-btn1 {
   width: 170px;
   height: 40px;
@@ -145,7 +155,7 @@
 .nested-container .inner-sub-container2 {
     background-color: #f5f4f7;
     border: 1px solid #e7e6e8;
-    height: 280px;
+    height: auto;
     display: flex;
     flex-direction: row;
     padding: 16px;
@@ -153,7 +163,7 @@
 
   .item-box2 {
     width: 100%;
-    height: 400px;
+    height: auto;
     margin: 20px;
     font-size: 15px;
     font-family: "Rajdhani", sans-serif;
@@ -172,6 +182,19 @@
     font-family: "Rajdhani", sans-serif;
   }
 
+  .embedded-code-container {
+    width: 97%;
+    height:100%;
+    overflow: hidden;
+  }
+
+  .first-video-hover:hover {
+    color: black !important; 
+  }
+  
+  .first-video-active {
+    background-color: #ddb42c;
+  }
  
 @media (min-width: 768px) {
     .rows {
@@ -192,10 +215,10 @@
 
 @media (max-width: 767px) {
     .custom-container{
-        height:1930px;
+        height:auto;
     }
     .nested-container{
-        height:1750px;
+        height:auto;
     }
   .item-container {
     margin-bottom: 0;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Space,
@@ -6,9 +6,8 @@ import {
   Col,
   Input,
   Checkbox,
-  Upload,
-  Image,
   Switch,
+  message,
 } from "antd";
 import {
   DeleteOutlined,
@@ -19,8 +18,13 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./AddQuiz.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuiz, getQuiz } from "../../../../actions/addQuiz/addQuiz";
 
-const AddQuiz = () => {
+const AddQuiz = ({ lessonId }) => {
+  const dispatch = useDispatch();
+  const quiz = useSelector((state) => state.quiz.quiz);
+  const [quizData,setQuizData]=useState([]);
   const [questions, setQuestions] = useState([
     {
       image: null,
@@ -33,21 +37,30 @@ const AddQuiz = () => {
 
   const [activeQuestion, setActiveQuestion] = useState(0);
 
-
   const toggleQuestionEdit = (questionIndex) => {
     if (activeQuestion === questionIndex) {
       setActiveQuestion(null);
-    } 
-    else {
+    } else {
       setActiveQuestion(questionIndex);
     }
   };
 
+  useEffect(() => {
+    if (lessonId) {
+      dispatch(getQuiz(lessonId));
+    }
+  }, [dispatch, lessonId]);
+  // console.log(quiz);
 
+  useEffect(() => {
+    if (quiz) {
+      setQuizData(quiz.data);
+    }
+  }, [quiz]);
 
+  console.log(quizData)
   const addQuestion = () => {
     const lastQuestion = questions[questions.length - 1];
-
     if (lastQuestion.questionText.trim() === "") {
       alert("Please complete the previous question before adding a new one.");
       return;
@@ -60,7 +73,7 @@ const AddQuiz = () => {
       correctAnswers: [false, false, false, false],
     };
     setQuestions([...questions, newQuestion]);
-    setActiveQuestion(questions.length)
+    setActiveQuestion(questions.length);
   };
 
   const removeQuestion = (questionIndex) => {
@@ -83,65 +96,64 @@ const AddQuiz = () => {
     setQuestions(updatedQuestions);
   };
 
-  const beforeUpload = (file) => {
-    const isImage = file.type.startsWith("image/");
-    if (!isImage) {
-      console.log("You can only upload image files!");
-    }
-    return isImage;
-  };
 
-  const customRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      const imageUrl = URL.createObjectURL(file);
-      // setImage(imageUrl);
-      onSuccess("ok");
-    }, 0);
-  };
-
-  const handleImageChange = (info, questionIndex) => {
-    if (info.file.status === "done") {
-      const imageUrl = URL.createObjectURL(info.file.originFileObj);
+  const saveQuestion = async (questionIndex) => {
+    try {
       const updatedQuestions = [...questions];
-      updatedQuestions[questionIndex].image = imageUrl;
-      updatedQuestions[questionIndex].alt = info.file.name;
+      const question = updatedQuestions[questionIndex];
+
+      if (question.questionText.trim() === "") {
+        alert("Please enter a question.");
+        return;
+      }
+
+      const validAnswers = question.answers.filter(
+        (answer) => answer.trim() !== ""
+      );
+      const validCorrectAnswers = question.correctAnswers.filter(Boolean);
+
+      if (validAnswers.length === 0) {
+        alert("Please enter at least one answer.");
+        return;
+      }
+
+      if (validCorrectAnswers.length === 0) {
+        alert("Please select at least one correct answer.");
+        return;
+      }
+
+      updatedQuestions[questionIndex].answers = validAnswers;
+      updatedQuestions[questionIndex].correctAnswers = validCorrectAnswers;
+
       setQuestions(updatedQuestions);
+      setActiveQuestion(null);
+      const options = question.answers.reduce((acc, answer, index) => {
+        acc[`option${String.fromCharCode(65 + index)}`] = answer;
+        return acc;
+      }, {});
+
+      const selectedOptions = validCorrectAnswers.map(
+        (isChecked, index) => `option${String.fromCharCode(65 + index)}`
+      );
+
+      const apiData = {
+        quizQuestion: question.questionText,
+        answer: selectedOptions,
+        option: options,
+        lessonId: lessonId,
+      };
+
+      // console.log(apiData);
+      const res = await dispatch(addQuiz(apiData));
+
+      // console.log("API Response:", res);
+      if (res.success) {
+        message.success(res.message);
+      }
+    } catch (error) {
+      console.error("Error:", error.response.data.message);
+      message.error(error.response.data.message);
     }
-  };
-
-  const handleReplaceImage = () => {};
-
-  const handleDeleteImage = () => {};
-
-  const saveQuestion = (questionIndex) => {
-    const updatedQuestions = [...questions];
-    const question = updatedQuestions[questionIndex];
-
-    if (question.questionText.trim() === "") {
-      alert("Please enter a question.");
-      return;
-    }
-
-    const validAnswers = question.answers.filter(
-      (answer) => answer.trim() !== ""
-    );
-    const validCorrectAnswers = question.correctAnswers.filter(Boolean);
-
-    if (validAnswers.length === 0) {
-      alert("Please enter at least one answer.");
-      return;
-    }
-
-    if (validCorrectAnswers.length === 0) {
-      alert("Please select at least one correct answer.");
-      return;
-    }
-
-    updatedQuestions[questionIndex].answers = validAnswers;
-    updatedQuestions[questionIndex].correctAnswers = validCorrectAnswers;
-
-    setQuestions(updatedQuestions);
-    setActiveQuestion(null);
   };
 
   return (
@@ -156,7 +168,7 @@ const AddQuiz = () => {
               margin: 0,
             }}
           >
-            <Link to={"/admin/card1"}>
+            <Link to={`/lesson/${lessonId}`}>
               <LeftOutlined style={{ fontSize: "14px" }} /> &nbsp; Back to
               lesson layout
             </Link>
@@ -173,6 +185,7 @@ const AddQuiz = () => {
           <Col lg={16} sm={24} xs={24}>
             <div className="add-subcontainer">
               <h2>Quiz Block</h2>
+            
               {questions.map((question, questionIndex) => (
                 <div
                   key={questionIndex}
@@ -198,6 +211,7 @@ const AddQuiz = () => {
                       ) : (
                         <Button
                           onClick={() => toggleQuestionEdit(questionIndex)}
+                          style={{visibility:'hidden'}}
                         >
                           Edit
                         </Button>
@@ -225,79 +239,7 @@ const AddQuiz = () => {
                       <p className="question-text">{question.questionText}</p>
                     )}
 
-                    {/* Image upload */}
-                    {question.image ? (
-                      <div
-                        className="image-container"
-                        style={{
-                          border: question.image ? "1px solid #dcdcdc" : "none",
-                        }}
-                      >
-                        <>
-                          <div
-                            style={{
-                              width: "200px",
-                              height: "100px",
-                            }}
-                          >
-                            <Image
-                              src={question.image}
-                              alt={question.alt}
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </div>
-
-                          <div className="image-alt">
-                            <p>Image alt text</p>
-                            <Input
-                              placeholder="Alt Text"
-                              value={question}
-                              onChange={(e) => {
-                                const updatedQuestions = [...questions];
-                                updatedQuestions[questionIndex].alt =
-                                  e.target.value;
-                                setQuestions(updatedQuestions);
-                              }}
-                              className="image-alt-text"
-                            />
-                          </div>
-                          <Button
-                            icon={<EditOutlined />}
-                            onClick={handleReplaceImage}
-                          >
-                            Replace
-                          </Button>
-                          <Button
-                            icon={<DeleteOutlined />}
-                            onClick={handleDeleteImage}
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      </div>
-                    ) : (
-                      <Upload
-                        beforeUpload={beforeUpload}
-                        customRequest={customRequest}
-                        showUploadList={false}
-                        accept="image/*"
-                        onChange={(info) =>
-                          handleImageChange(info, questionIndex)
-                        }
-                      >
-                        <Button
-                          className="add-answer-btn"
-                          style={{ marginTop: "10px" }}
-                        >
-                          <PlusOutlined style={{ fontSize: "12px" }} /> Add
-                          Image
-                        </Button>
-                      </Upload>
-                    )}
+              
                   </div>
                   <hr />
                   {/* Answers */}

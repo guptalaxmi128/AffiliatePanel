@@ -58,8 +58,8 @@
   justify-content: space-between;
 }
 
-.show-text-container h4 {
-  font-size: 18px;
+.show-text-super-container h2 {
+  font-size: 22px;
   font-family: "Rajdhani", sans-serif;
 }
 
@@ -99,6 +99,21 @@
 .show-quiz-subcontainer,.outline-subcontainer h5{
     font-size: 18px;
     font-family: "Rajdhani", sans-serif;
+}
+
+
+.save-lesson-btn {
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  align-items: center;
+  display: flex;
+  height: 30px;
+  margin-left: 10px;
 }
 
 @media (min-width: 768px) {

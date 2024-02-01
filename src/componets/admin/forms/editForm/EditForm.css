@@ -1,0 +1,102 @@
+
+
+.header1 {
+    background-color: white;
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.template-name {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.edit-icon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.template-container {
+    display: flex;
+    background-color: #f4f4f4;
+    height: 100vh;
+    padding:25px;
+}
+
+.left-side {
+    flex: 70%;
+    padding: 20px;
+    background-color: rgba(181, 178, 178, 0.1); 
+    margin-right: 25px;
+  
+  
+}
+
+.right-side {
+    flex: 30%; 
+    padding: 20px;
+   background-color:#fff;
+   width: 30vw; 
+   overflow-x: hidden;
+   scrollbar-width: thin; 
+}
+
+.right-side::-webkit-scrollbar {
+    width: 2px; 
+  }
+  .right-side::-webkit-scrollbar-thumb {
+    background-color: #888; 
+  }
+
+.template-card {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    justify-content: center; 
+    align-items: center; 
+}
+
+.editable-button {
+    background-color: #f2d872;
+    color: black;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .editable-button.editing {
+    background-color: white;
+    
+  }
+  
+  /* Input Field Styles */
+  .editable-button input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: 400;
+    color: black;
+    width: 100%;
+  }
+  
+ 
+  

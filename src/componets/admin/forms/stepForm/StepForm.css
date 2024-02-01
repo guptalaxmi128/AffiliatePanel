@@ -1,0 +1,57 @@
+/* StepForm.css */
+.step-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.step-form-card {
+  width: 500px;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.step-tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #d9d9d9;
+  background-color: #f2f2f2;
+  font-size: 24px;
+  font-family: Rajdhani, sans-serif;
+}
+
+.step-tab.active {
+  background-color: #fff;
+  color: #f2d872;
+}
+
+.next-step-btn {
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 6px 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  margin: 0px auto;
+  display: flex;
+  width: 100%;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.registration-form {
+  margin-bottom: 10px;
+  width: 350px;
+  box-shadow: 0 4px 8px 0 rgba(242, 216, 114, 0.2);
+  padding: 20px;
+  align-items: center;
+}

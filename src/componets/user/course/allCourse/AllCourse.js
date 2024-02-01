@@ -1,70 +1,87 @@
-import React from "react";
-import { Card, Avatar } from "antd";
+import React, { useEffect } from "react";
+import { Card, Avatar,Row,Col } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import image1 from "../../../../assets/course/image1.png";
-import image2 from "../../../../assets/course/image2.png";
-import image3 from "../../../../assets/course/image3.png";
-import image4 from "../../../../assets/course/image4.png";
+import { Link } from "react-router-dom";
 import "./AllCourse.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCourseUser } from "../../../../actions/allCourseUser/allCourseUser";
 
 const { Meta } = Card;
 
-const cardData = [
-  {
-    title: "AFFILIATE INDIANS BUSINESS BUILDER ",
-    cardText:
-      "Everything you need to know to start affiliate marketing business in India",
-    image: image1,
-    instructor: "Prakhar Kulshrestha",
-    price: "₹149.99",
-    linkTo: "/basic",
-  },
-  {
-    title: "AFFILIATE INDIANS MODAL",
-    cardText: "BEGINNER MEMBERSHIP",
-    image: image2,
-    instructor: "Prakhar Kulshrestha",
-    price: "₹99.99",
-    linkTo: "/beginner",
-  },
-  {
-    title: "AFFILIATE INDIANS BLUEPRINT",
-    cardText: "PRO MEMBERSHIP → 17 BONUSES INSIDE",
-    image: image3,
-    instructor: "Prakhar Kulshrestha",
-    price: "₹149.99",
-    linkTo: "/pro",
-  },
-  {
-    title: "AFFILIATE INDIANS COUNCIL",
-    cardText:
-      " EXPERT MEMBERSHIP: Get involved in Hot-seat sessions with CEO & Founder to launch your online business → 17 BONUSES INSIDE.",
-    image: image4,
-    instructor: "Prakhar Kulshrestha",
-    price: "₹149.99",
-    linkTo: "/expert",
-  },
-];
 
 const AllCourse = () => {
+  const dispatch = useDispatch();
+  const allCourse = useSelector((state) => state.allCourseUser.courses);
+  const cardData = allCourse?.data;
+
+  useEffect(() => {
+    dispatch(getAllCourseUser());
+  }, [dispatch]);
+
+  // const shareUrl= window.location.href;
+
+  // const extractCouponCode = (card) => {
+  //   const defaultCourse = card.course_coupons.find(
+  //     (course) => course.type === "DEFAULT"
+  //   );
+  //   return defaultCourse ? defaultCourse.coupon.couponCode : null;
+  // };
+
+  // console.log(cardData);
   return (
     <div className="all-course-container">
-      {cardData.map((card, index) => (
-        <Card
-          key={index}
-          hoverable
-          className="custom-cards card-hovers"
-          cover={<img alt="card" src={card.image} />}
-        >
-          <Meta title={card.title} description={card.cardText} />
-          <hr className="custom-hrs" />
-          <div className="info-containers">
-            <Avatar icon={<UserOutlined />} />
-            <span className="info-texts">{card.instructor}</span>
-            <span className="price-texts">{card.price}</span>
-          </div>
-        </Card>
+      {cardData?.map((card, index) => (
+        <>
+          <Row gutter={16} justify="start">
+            <Link
+              to={{ pathname: `/user/enrolled/${card.id}` }}
+              key={index}
+              style={{ textDecoration: "none", flex: "1 1 24%" }}
+            >
+              <Col
+                key={index}
+                xs={{ span: 24 }}
+                sm={{ span: 12 }}
+                md={{ span: 6 }}
+              >
+                <Card
+                  key={index}
+                  hoverable
+                  className="custom-cards card-hovers"
+                  cover={
+                    <img
+                      alt="card"
+                      src={`${card?.courseImagePath}`}
+                      style={{ height: "200px" }}
+                    />
+                  }
+                >
+                  <Meta title={card.title} description={card.subTitle} />
+                  <hr className="custom-hrs" />
+                  <div className="info-containers">
+                    <Avatar
+                      icon={<UserOutlined />}
+                      src={`${card?.authorImagePath}`}
+                    />
+                    <span className="info-texts">{card.authorName}</span>
+                    <span className="price-texts">
+                      {card.isPaid
+                        ? card.price !== null
+                          ? `₹${card.price}`
+                          : ""
+                        : "FREE"}
+                    </span>
+                  </div>
+                </Card>
+              </Col>
+            </Link>
+          </Row>
+        </>
       ))}
+
+      {/* <FacebookShareButton url={shareUrl} quote="Affiliate Marketing">
+        Share on Facebook
+      </FacebookShareButton> */}
     </div>
   );
 };

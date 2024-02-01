@@ -1,0 +1,46 @@
+.admin-sale-link-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .admin-sale-link-breadcrumb h2 {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .admin-sale-link-breadcrumb-subcontainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.admin-sale-link-container {
+  padding: 20px;
+}
+
+.admin-sale-link-subcontainer {
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #fff;
+  padding:20px;
+}
+
+.admin-sale-link-btn{
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 4px 12px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .admin-sale-link-breadcrumb p{
+      margin-left: 32px !important;
+  }
+
+}

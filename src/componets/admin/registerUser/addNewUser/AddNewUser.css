@@ -1,0 +1,55 @@
+.add-new-user-breadcrumb {
+  padding: 10px;
+  background: #fff;
+}
+.add-new-user-breadcrumb p {
+  font-size: 24px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.add-new-user-container {
+  padding: 20px;
+}
+
+.add-new-user-breadcrumb-subcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-new-user-container {
+  padding: 20px;
+}
+
+.add-new-user-subcontainer {
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #fff;
+  padding: 20px;
+}
+
+.add-new-user-subcontainer h2 {
+  font-family: "Rajdhani", sans-serif !important;
+  font-size: 24px;
+}
+
+.add-new-user-btn {
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 6px 15px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  margin: 0px auto;
+  display: flex;
+  width: 80px;
+  height: 35px;
+}
+
+@media (max-width: 768px) {
+  .add-new-user-breadcrumb-subcontainer {
+    display: block;
+    margin-left: 35px;
+  }
+}

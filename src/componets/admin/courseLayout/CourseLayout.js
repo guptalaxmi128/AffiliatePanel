@@ -1,6 +1,6 @@
 import React from "react";
-import { Layout, Col, Menu } from "antd";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Layout, Col, Menu,message } from "antd";
+import { Link, useLocation, useParams,useNavigate } from "react-router-dom";
 import {
   BookOutlined,
   PercentageOutlined,
@@ -12,14 +12,19 @@ import {
 } from "@ant-design/icons";
 import backgroundImage from "../../../assets/img/cube_dark.jpg";
 import logo from "../../../assets/img/logo_white.png";
-import MainCurriculum from "../course/curriculum/maincurriculum/MainCurriculum";
+import { LOGOUT_ADMIN } from "../../../constants/actionTypes";
+// import MainCurriculum from "../course/curriculum/maincurriculum/MainCurriculum";
+import MainCurriculum1 from "../course/curriculum/maincurriculum/MainCurriculum1";
+import { useDispatch } from "react-redux";
 
 const { Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 const CourseLayout = () => {
+  const dispatch=useDispatch();
   const location = useLocation();
   const { courseId } = useParams();
+  const navigate = useNavigate();
   console.log(courseId);
 
   const carouselStyle = {
@@ -27,6 +32,13 @@ const CourseLayout = () => {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundAttachment: "fixed",
+  };
+
+  const handleLogout = () => {
+    dispatch({ type: LOGOUT_ADMIN });
+    console.log("Admin");
+    message.success("Admin logout successfully!");
+    navigate("/login");
   };
 
   const menuItems = [
@@ -50,8 +62,21 @@ const CourseLayout = () => {
         {
           key: "2.2",
           label: "List of all course",
-          link: "/admin/allcourse",
           icon: <BarsOutlined />,
+          subMenu: [
+            {
+              key: "2.2.1",
+              label: "All Courses",
+              link: "/admin/allcourse",
+              icon: <BarsOutlined />,
+            },
+            {
+              key: "2.2.2",
+              label: "Registration Form",
+              link: "/admin/form",
+              icon: <BarsOutlined />,
+            },
+          ],
         },
       ],
     },
@@ -193,7 +218,7 @@ const CourseLayout = () => {
       key: "11",
       label: "Form",
       icon: <TeamOutlined />,
-      link: "/admin/form",
+      link: "/forms/new",
     },
     {
       key: "12",
@@ -211,9 +236,33 @@ const CourseLayout = () => {
     },
     {
       key: "13",
+      label: "Pricing",
+      icon: <BarsOutlined />,
+      link: "/admin/pricing",
+    },
+    {
+      key: "14",
+      label: "Add Coupon",
+      icon: <BarsOutlined />,
+      link: "/admin/add-coupon",
+    },
+    {
+      key: "15",
+      label: "Add Template",
+      icon: <BarsOutlined />,
+      link: "/admin/template",
+    },
+    {
+      key: "16",
+      label: "Affiliate Link Request",
+      icon: <BarsOutlined />,
+      link: "/admin/affiliate-link-request",
+    },
+    {
+      key: "17",
       label: "Logout",
       icon: <LogoutOutlined />,
-      link: "/",
+      onClick:handleLogout
     },
   ];
 
@@ -225,6 +274,41 @@ const CourseLayout = () => {
     color: "white",
     fontFamily: "Rajdhani",
     marginTop: "10px",
+    fontSize:'16px'
+  };
+
+  const renderMenuItems = (items) => {
+    return items.map((item) => {
+      if (item.subMenu) {
+        return (
+          <SubMenu
+            key={item.key}
+            icon={item.icon}
+            title={item.label}
+            style={customMenuItemStyle}
+          >
+            {renderMenuItems(item.subMenu)}
+          </SubMenu>
+        );
+      } else {
+        return (
+          <Menu.Item
+            key={item.key}
+            icon={item.icon}
+            onClick={item.key === "17" ? item.onClick : null} 
+            style={customMenuItemStyle}
+          >
+            {item.link ? (
+              <Link to={item.link} style={{ textDecoration: "none" }}>
+                {item.label}
+              </Link>
+            ) : (
+              item.label
+            )}
+          </Menu.Item>
+        );
+      }
+    });
   };
 
   return (
@@ -254,47 +338,13 @@ const CourseLayout = () => {
                 }}
               />
             </Col>
+          
             <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
               style={customMenuStyle}
             >
-              {menuItems.map((item) =>
-                item.subMenu ? (
-                  <SubMenu
-                    key={item.key}
-                    icon={item.icon}
-                    title={item.label}
-                    style={customMenuItemStyle}
-                  >
-                    {item.subMenu.map((subItem) => (
-                      <Menu.Item
-                        key={subItem.key}
-                        icon={subItem.icon}
-                        style={{ paddingLeft: "30px" }}
-                      >
-                        <Link
-                          to={subItem.link}
-                          style={{ textDecoration: "none" }}
-                        >
-                          {subItem.label}
-                        </Link>
-                      </Menu.Item>
-                    ))}
-                  </SubMenu>
-                ) : (
-                  <Menu.Item
-                    key={item.key}
-                    icon={item.icon}
-                    style={customMenuItemStyle}
-                  >
-                    <Link to={item.link} style={{ textDecoration: "none" }}>
-                      {item.label}
-                    </Link>
-                  </Menu.Item>
-                )
-              )}
-
+              {renderMenuItems(menuItems)}
               <div className="demo-logo-vertical" />
             </Menu>
           </Sider>
@@ -308,7 +358,7 @@ const CourseLayout = () => {
                     : "0",
               }}
             >
-              <MainCurriculum courseId={courseId} />
+              <MainCurriculum1 courseId={courseId} />
             </Content>
             <Footer style={{ textAlign: "center" }}>
               Affiliate Indians by @ Tech Astute

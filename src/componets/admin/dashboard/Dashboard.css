@@ -1,0 +1,22 @@
+.dashboard-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .dashboard-breadcrumb h2 {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+
+  .dashboard-breadcrumb-subcontainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+@media (max-width: 768px) {
+  .dashboard-breadcrumb p{
+      margin-left: 32px !important;
+  }
+
+}

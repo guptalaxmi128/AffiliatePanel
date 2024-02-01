@@ -1,0 +1,55 @@
+.add-assignment-breadcrumb {
+  padding: 10px;
+  background: #fff;
+}
+.add-assignment-breadcrumb p {
+  font-size: 24px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.add-assignment-container {
+  padding: 20px;
+}
+
+.add-assignment-breadcrumb-subcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-assignment-container {
+  padding: 20px;
+}
+
+.add-assignment-subcontainer {
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #fff;
+  padding: 20px;
+}
+
+.add-assignment-subcontainer h2 {
+  font-family: "Rajdhani", sans-serif !important;
+  font-size: 24px;
+}
+
+.add-assignment-btn {
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 6px 15px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  margin: 0px auto;
+  display: flex;
+  width: 70px;
+  height: 35px;
+}
+
+@media (max-width: 768px) {
+  .add-assignment-breadcrumb-subcontainer {
+    display: block;
+    margin-left: 35px;
+  }
+}

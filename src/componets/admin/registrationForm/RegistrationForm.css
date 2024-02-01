@@ -1,0 +1,37 @@
+.registration-form-container{
+    padding:20px;
+}
+
+.registration-form-subcontainer{
+    border:1px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
+    padding:20px;
+}
+
+.create-new-form-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    width:100px;
+    height:35px;
+  
+}
+
+.affiliate-edit-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+    height:35px;
+  }

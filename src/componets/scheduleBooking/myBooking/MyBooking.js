@@ -1,87 +1,104 @@
-import React from "react";
-import { Breadcrumb ,Table} from "antd";
+import React, { useEffect, useState} from "react";
+import { Breadcrumb, Table, Input } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
+import moment from "moment";
 import "./MyBooking.css";
-
+import { useDispatch, useSelector } from "react-redux";
+import { getMyBooking } from "../../../actions/scheduleCall/scheduleCall";
 
 const tableContentStyle = {
-    fontFamily: 'Rajdhani',
-    textAlign:'center'
+  fontFamily: "Rajdhani",
+  textAlign: "center",
+  fontSize: "16px",
+  color: "#000",
+};
+
+const { Search } = Input;
+
+const columns = [
+  {
+    title: "SNo",
+    dataIndex: "key",
+    key: "SNo",
+    render: (index) => index,
+    onCell: () => {
+      return {
+        style: tableContentStyle,
+      };
+    },
+  },
+  {
+    title: "User Name",
+    dataIndex: "userName",
+    key: "userName",
+    render: (text) => (text ? text : "MyBooking"),
+    onCell: () => {
+      return {
+        style: tableContentStyle,
+      };
+    },
+  },
+  {
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+    render: (text) => moment(text).format("DD-MM-YYYY"), 
+    onCell: () => {
+      return {
+        style: tableContentStyle,
+      };
+    },
+  },
+  {
+    title: "Timing",
+    dataIndex: "timing",
+    key: "timing",
+    onCell: () => {
+      return {
+        style: tableContentStyle,
+      };
+    },
+  },
+  {
+    title: "Advisor Name",
+    dataIndex: "AdvisorName",
+    key: "AdvisorName",
+    render: (text) => (text ? text : "MyBooking"),
+    onCell: () => {
+      return {
+        style: tableContentStyle,
+      };
+    },
+  },
+];
+const MyBooking = () => {
+  const dispatch = useDispatch();
+  const booking = useSelector((state) => state.scheduleCall.scheduleCall);
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [searchedDate, setSearchedDate] = useState(null);
+  // console.log(booking)
+
+  const handleSearch = (value) => {
+    setSearchedDate(value);
+    dispatch(getMyBooking(value));
   };
 
-const dataSource = [
-    {
-      key: '1',
-      SNo: 1,
-      Name: 'John Doe',
-      Date: '2023-10-16',
-      Timing: '10:00 AM-11:00 AM',
-      AdvisorName: 'Prakhar Kulshrestha',
-    },
-    {
-      key: '2',
-      SNo: 2,
-      Name: 'Jane Smith',
-      Date: '2023-10-17',
-      Timing: '02:30 PM-4:00 PM',
-      AdvisorName: 'Prakhar Kulshrestha',
-    },
-    
-  ];
-  
-  const columns = [
-    {
-      title: 'SNo',
-      dataIndex: 'SNo',
-      key: 'SNo',
-      onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
-    },
-    {
-      title: 'Name',
-      dataIndex: 'Name',
-      key: 'Name',
-      onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
-    },
-    {
-      title: 'Date',
-      dataIndex: 'Date',
-      key: 'Date',
-      onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
-    },
-    {
-      title: 'Timing',
-      dataIndex: 'Timing',
-      key: 'Timing',
-      onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
-    },
-    {
-      title: 'Advisor Name',
-      dataIndex: 'AdvisorName',
-      key: 'AdvisorName',
-      onCell: () => {
-        return {
-          style: tableContentStyle,
-        };
-      },
-    },
-  ];
-const MyBooking = () => {
+  useEffect(() => {
+    filterData();
+  }, [booking]);
+
+  const filterData = () => {
+    const filteredData = booking?.data?.filter(
+      (record) => record.date === searchedDate && record.timing !== null
+    );
+    const filteredDataWithKey = filteredData?.map((record, index) => ({
+      ...record,
+      key: index + 1,
+    }));
+    setFilteredDataSource(filteredDataWithKey);
+  };
+
+  // console.log(filteredDataSource);
   return (
     <>
       <div className="mybooking-breadcrumb">
@@ -94,7 +111,7 @@ const MyBooking = () => {
               margin: 0,
             }}
           >
-        My Booking
+            My Booking
           </p>
           <Breadcrumb>
             <Breadcrumb.Item>
@@ -108,10 +125,17 @@ const MyBooking = () => {
       </div>
       <div className="mybooking-container">
         <div className="mybooking-subcontainer">
-          <h2>Schedule Booking</h2>
-          <div style={{ overflowX: 'auto' }}>
-          <Table dataSource={dataSource} columns={columns} />
-          </div>
+          <h2>My Booking</h2>
+          <Search
+            placeholder="Search by Date (2023-12-01)"
+            onSearch={handleSearch}
+            style={{ marginBottom: 16 }}
+          />
+          {filteredDataSource?.length > 0 && ( 
+            <div style={{ overflowX: "auto" }}>
+              <Table dataSource={filteredDataSource} columns={columns} />
+            </div>
+          )}
         </div>
       </div>
     </>

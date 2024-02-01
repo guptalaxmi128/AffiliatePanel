@@ -1,29 +1,45 @@
 import React, { useState } from "react";
-import { Button, Input, Space, Row, Col } from "antd";
+import { Button, Input, Space, Row, Col, message } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./AddUpsell.css";
+import { useDispatch } from "react-redux";
+import { addUpsell } from "../../../../actions/addUpsell/addUpsell";
 
-function AddUpsell() {
-  const [buttons, setButtons] = useState([]);
+function AddUpsell({ lessonId }) {
+  const dispatch = useDispatch();
+
+  // const [buttons, setButtons] = useState([]);
   const [buttonText, setButtonText] = useState("");
   const [buttonLink, setButtonLink] = useState("");
   const [errorText, setErrorText] = useState("");
   const [errorLink, setErrorLink] = useState("");
 
-  const addNewButton = () => {
+  const addNewButton = async () => {
     setErrorText("");
     setErrorLink("");
 
     if (validateInputs()) {
       const newButton = {
-        text: buttonText,
-        link: buttonLink,
+        buttonText,
+        buttonLink,
+        lessonId,
       };
 
-      setButtons([...buttons, newButton]);
-      setButtonText("");
-      setButtonLink("");
+      try {
+        const response = await dispatch(addUpsell(newButton));
+
+        if (response.success) {
+          message.success(response.message);
+          // setButtons([...buttons, newButton]);
+          setButtonText("");
+          setButtonLink("");
+        } else {
+          message.error("API Error:", response.data.message);
+        }
+      } catch (error) {
+        message.error("Error:", error.message);
+      }
     }
   };
 
@@ -43,20 +59,20 @@ function AddUpsell() {
     return valid;
   };
 
-  const duplicateButton = (index) => {
-    if (index >= 0 && index < buttons.length) {
-      const duplicatedButton = buttons[index];
-      setButtons([...buttons, duplicatedButton]);
-    }
-  };
+  // const duplicateButton = (index) => {
+  //   if (index >= 0 && index < buttons.length) {
+  //     const duplicatedButton = buttons[index];
+  //     setButtons([...buttons, duplicatedButton]);
+  //   }
+  // };
 
-  const removeButton = (index) => {
-    if (index >= 0 && index < buttons.length) {
-      const updatedButtons = [...buttons];
-      updatedButtons.splice(index, 1);
-      setButtons(updatedButtons);
-    }
-  };
+  // const removeButton = (index) => {
+  //   if (index >= 0 && index < buttons.length) {
+  //     const updatedButtons = [...buttons];
+  //     updatedButtons.splice(index, 1);
+  //     setButtons(updatedButtons);
+  //   }
+  // };
 
   return (
     <>
@@ -105,12 +121,13 @@ function AddUpsell() {
                 <span style={{ color: "red" }}>{errorLink}</span>
               </Col>
             </Row>
+
             <Button className="add-upsell-btn" onClick={addNewButton}>
               Add Button
             </Button>
           </div>
 
-          <div style={{ margin: "20px" }}>
+          {/* <div style={{ margin: "20px" }}>
             {buttons.map((button, index) => (
               <div
                 key={index}
@@ -133,7 +150,7 @@ function AddUpsell() {
                 </Space>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </>

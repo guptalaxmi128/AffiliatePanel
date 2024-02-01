@@ -1,0 +1,26 @@
+.allcoupon-btn {
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+    width:110px;
+    height:35px;
+  }
+
+  .allcoupon-edit-btn{
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+    height:35px;
+  }

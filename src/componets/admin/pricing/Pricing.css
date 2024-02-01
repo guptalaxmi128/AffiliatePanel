@@ -1,0 +1,82 @@
+.pricing-preview-container {
+  padding: 20px;
+}
+
+.pricing-preview-subcontainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.pricing-preview-subcontainer h2 {
+  font-size: 32px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.pricing-plan-btn {
+  background: #ddb42c !important;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000 !important;
+  font-family: "Rajdhani", sans-serif;
+  align-items: center;
+  display: flex;
+  height: 40px;
+}
+
+.pricing-subcontainer0 {
+  margin: 20px;
+  border: 1px solid black;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-subcontainer0 h1 {
+  font-size: 24px;
+  font-family: "Rajdhani", sans-serif;
+  text-align: center;
+}
+
+.pricing-subcontainer0 p {
+  font-size: 18px;
+  font-family: "Rajdhani", sans-serif;
+  text-align: center;
+}
+
+.modal-container {
+  border: 1px solid #dcdcdc;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  /* align-items: center; */
+}
+
+.modal-image-container {
+  width: 150px;
+}
+
+.price-plan {
+  width: 120px;
+}
+
+.modal-text-container {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.modal-text-container h1 {
+  font-size: 16px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.modal-text-container p {
+  font-size: 14px;
+  font-family: "Rajdhani", sans-serif;
+}

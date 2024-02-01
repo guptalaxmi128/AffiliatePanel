@@ -1,0 +1,36 @@
+.user-resources-container{
+    padding:16px;
+}
+
+.user-resources-subcontainer{
+    border:1px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+}
+
+.user-resources-subcontainer h2{
+   font-family: Rajdhani,sans-serif;
+   font-size: 24px;
+}
+
+.user-resources-subcontainer p{
+    font-family: Rajdhani,sans-serif;
+    font-size: 18px;
+ }
+
+ ::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+
+  .pdf-page .react-pdf__Page__textContent.textLayer {
+    display: none !important;
+  }

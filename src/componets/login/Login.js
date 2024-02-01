@@ -1,29 +1,17 @@
-import React from "react";
-import { Form, Input, Button, Select, Row, Col } from "antd";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { Form, Input, Button, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import logo from "../../assets/img/logo_white.png";
-import "./Login.css";
-import { setCurrentUserType } from "../../actions/userType/userType";
 import { loginAdmin } from "../../actions/addAdmin/addAdmin";
-import { loginUser } from "../../actions/loginUser/loginUser";
+import "./Login.css";
 
-const { Option } = Select;
 
 const Login = () => {
   const navigate = useNavigate();
-  const currentUserType = useSelector((state) => state.user.currentUserType);
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
-
-  const handleUserTypeChange = (newUserType) => {
-    dispatch(setCurrentUserType(newUserType));
-  };
-
-  const userTypes = [
-    { value: "admin", label: "Admin" },
-    { value: "user", label: "User" },
-  ];
 
   const validateEmail = (rule, value) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -34,20 +22,31 @@ const Login = () => {
   };
 
   const validatePassword = (rule, value) => {
-    if (!value || value.length === 8) {
+    if (!value || value.length >= 8) {
       return Promise.resolve();
     }
     return Promise.reject("Password must be 8 characters long");
   };
 
-  const onFinish = (values) => {
-    console.log("Received values:", values);
-    if (currentUserType === "admin") {
-      dispatch(loginAdmin(values));
-      navigate("/admin");
-    } else if (currentUserType === "user") {
-      dispatch(loginUser(values));
-      navigate("/user");
+  const onFinish = async (values) => {
+    // console.log("Received values:", values);
+
+    try {
+      setLoading(true);
+
+      const response = await dispatch(loginAdmin(values));
+      // console.log("Admin Login Response:", response);
+
+      if (response.success) {
+        navigate("/admin/dashboard");
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      console.error("Login Error:", error.response.data.message);
+      message.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +66,7 @@ const Login = () => {
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >
-          <Form.Item label="Select User Type" name="userType">
+          {/* <Form.Item label="Select User Type" name="userType">
             <Row gutter={16}>
               <Col lg={24} sm={24} xs={24}>
                 <Select
@@ -83,7 +82,7 @@ const Login = () => {
                 </Select>
               </Col>
             </Row>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="Email"
@@ -136,8 +135,8 @@ const Login = () => {
             </Link>
 
             <Form.Item>
-              <Button className="login-btn" htmlType="submit">
-                Login Now <ArrowRightOutlined />
+              <Button className="login-btn" htmlType="submit" loading={loading}>
+                {loading ? "Logging in..." : "Login Now"}
               </Button>
             </Form.Item>
           </div>

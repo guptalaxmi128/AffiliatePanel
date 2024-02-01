@@ -39,8 +39,8 @@ const DraggableSection = ({
   lessons,
   setLessons,
   courseId,
-  isQuickActionsActive,
-  setIsQuickActionsActive,
+  showNewSection,
+  setShowNewSection,
 }) => {
   const dispatch = useDispatch();
   // const course = useSelector((state) => state.course.course);
@@ -51,6 +51,7 @@ const DraggableSection = ({
   const [newLessonName, setNewLessonName] = useState("");
   const [isPublished, setIsPublished] = useState(false);
   const [isAddContentVisible, setIsAddContentVisible] = useState(false);
+  const [isQuickActionsActive, setIsQuickActionsActive] = useState(false);
   // const [selectedCourse, setSelectedCourse] = useState(null);
 
   const sectionInfo = {
@@ -88,7 +89,7 @@ const DraggableSection = ({
   };
 
   const handleRename = () => {
-    // setIsQuickActionsActive(false);
+    setIsQuickActionsActive(false);
   };
 
   const handleCancel = () => {
@@ -97,7 +98,13 @@ const DraggableSection = ({
 
   const handlePublishAll = () => {};
 
-  
+  // const handleDuplicate = () => {
+  //   const duplicatedSection = JSON.parse(JSON.stringify(section));
+  //   duplicatedSection.name = `${section.name} Copy`;
+  //   const duplicatedLessons = section.lessons.map((lesson) => `${lesson} Copy`);
+  //   duplicatedSection.lessons = duplicatedLessons;
+  //   setSections([...sections, duplicatedSection]);
+  // };
 
   const handleDuplicate = () => {
     const duplicatedSection = JSON.parse(JSON.stringify(section));
@@ -208,252 +215,276 @@ const DraggableSection = ({
     </Menu>
   );
 
-  console.log(isQuickActionsActive);
-  console.log(sectionName);
-  console.log(sections);
-  return (
-    <Droppable droppableId={`section-${section.id}`} type="group">
-      {(provided) => (
-        <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div
-            className="container"
-            style={{ paddingLeft: "0px", paddingRight: "0px" }}
-          >
-            <div className="right-container">
-            
-                <div>
-                 
-                      <div className="quick-actions-container">
-                        <Col lg={12} xs={10} sm={12}>
-                          <h3>{sectionName}</h3>
-                        </Col>
-                        &nbsp;&nbsp;
-                        <Dropdown overlay={menu1} trigger={["click"]}>
-                          <Button className="quick-action-btn">
-                            Quick Action <DownOutlined />
-                          </Button>
-                        </Dropdown>{" "}
-                        &nbsp;&nbsp;
-                        <Dropdown overlay={menu} trigger={["click"]}>
-                          <Button icon={<MoreOutlined />} />
-                        </Dropdown>
-                      </div>
-                    </div>
-                
-                    {isQuickActionsActive && (
-                <div className="input-container">
-                  <Col lg={18} xs={24} sm={12}>
-                    <Input
-                      placeholder="New Section"
-                      value={sectionName}
-                      onChange={(e) => setSectionName(e.target.value)}
-                    />
-                  </Col>
-                  <Space className="btn-container">
-                    <Button
-                      type="default"
-                      style={{ fontFamily: "Rajdhani", fontSize: "16px" }}
-                      onClick={handleCancel}
-                    >
-                      Cancel
-                    </Button>
-                    <Button className="save-btn" onClick={handleSave}>
-                      Save
-                    </Button>
-                  </Space>
-                </div>
-              )}
-              <div className="divider"></div>
 
-              <div>
-                {lessons.map((lesson, index) => (
-                  <Draggable
-                    draggableId={`lesson-${lesson.id}`}
-                    index={index}
-                    key={lesson.id}
-                  >
-                    {(provided) => (
-                      <div
-                        className="container1"
-                        style={{ paddingLeft: "0px", paddingRight: "0px" }}
-                        key={index}
-                        {...provided.dragHandleProps}
-                        {...provided.draggableProps}
-                        ref={provided.innerRef}
+  return (
+    <>
+      <Droppable droppableId={`section-${section.id}`} type="group">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            <div
+              className="container"
+              style={{ paddingLeft: "0px", paddingRight: "0px" }}
+            >
+              <div className="right-container">
+                {isQuickActionsActive && sections.length>0 ? (
+                  <div>
+                    <div className="quick-actions-container">
+                      <Col lg={12} xs={10} sm={12}>
+                        <h3>{sectionName}</h3>
+                      </Col>
+                      &nbsp;&nbsp;
+                      <Dropdown overlay={menu1} trigger={["click"]}>
+                        <Button className="quick-action-btn">
+                          Quick Action <DownOutlined />
+                        </Button>
+                      </Dropdown>{" "}
+                      &nbsp;&nbsp;
+                      <Dropdown overlay={menu} trigger={["click"]}>
+                        <Button icon={<MoreOutlined />} />
+                      </Dropdown>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="input-container">
+                    <Col lg={18} xs={24} sm={12}>
+                      <Input
+                        placeholder="New Section"
+                        value={sectionName}
+                        onChange={(e) => setSectionName(e.target.value)}
+                      />
+                    </Col>
+                    <Space className="btn-container">
+                      <Button
+                        type="default"
+                        style={{ fontFamily: "Rajdhani", fontSize: "16px" }}
+                        onClick={handleCancel}
                       >
-                        {editingIndex === index ? (
-                          <div>
+                        Cancel
+                      </Button>
+                      <Button className="save-btn" onClick={handleSave}>
+                        Save
+                      </Button>
+                    </Space>
+                  </div>
+                )}
+                <div className="divider"></div>
+
+                <div>
+                  {lessons.map((lesson, index) => (
+                    <Draggable
+                      draggableId={`lesson-${lesson.id}`}
+                      index={index}
+                      key={lesson.id}
+                    >
+                      {(provided) => (
+                        <div
+                          className="container1"
+                          style={{ paddingLeft: "0px", paddingRight: "0px" }}
+                          key={index}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                          ref={provided.innerRef}
+                        >
+                          {editingIndex === index ? (
+                            <div>
+                              <div className="right-container">
+                                <div className="input-container">
+                                  <Col lg={12} xs={24} sm={12}>
+                                    <Input
+                                      value={newLessonName}
+                                      onChange={(e) =>
+                                        setNewLessonName(e.target.value)
+                                      }
+                                    />
+                                  </Col>
+                                  <Space className="btn-container">
+                                    <Button
+                                      type="default"
+                                      style={{
+                                        fontFamily: "Rajdhani",
+                                        fontSize: "16px",
+                                      }}
+                                      onClick={handleCancelEdit}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      className="save-btn"
+                                      onClick={() => handleSaveEdit(index)}
+                                    >
+                                      Save
+                                    </Button>
+                                  </Space>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
                             <div className="right-container">
                               <div className="input-container">
-                                <Col lg={12} xs={24} sm={12}>
-                                  <Input
-                                    value={newLessonName}
-                                    onChange={(e) =>
-                                      setNewLessonName(e.target.value)
-                                    }
-                                  />
+                                <Col lg={8} xs={10} sm={12}>
+                                  <Link
+                                    to="/lesson"
+                                    style={{ textDecoration: "none" }}
+                                  >
+                                    {/* <h3>{lesson.name}</h3> */}
+                                    <h3>{lesson.lessonName}</h3>
+                                  </Link>
                                 </Col>
                                 <Space className="btn-container">
-                                  <Button
-                                    type="default"
-                                    style={{
-                                      fontFamily: "Rajdhani",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={handleCancelEdit}
+                                  {isPublished ? (
+                                    <Button
+                                      style={{
+                                        fontFamily: "Rajdhani",
+                                        background: "white",
+                                        border: "1px solid green",
+                                        color: "green",
+                                      }}
+                                    >
+                                      Published
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      type="default"
+                                      style={{
+                                        fontFamily: "Rajdhani",
+                                      }}
+                                      onClick={handlePublishClick}
+                                    >
+                                      Publish
+                                    </Button>
+                                  )}
+                                  {isAddContentVisible && (
+                                    <Button
+                                      type="default"
+                                      style={{ fontFamily: "Rajdhani" }}
+                                    >
+                                      Add Content
+                                    </Button>
+                                  )}
+                                  <Dropdown
+                                    overlay={menu2(index)}
+                                    trigger={["click"]}
                                   >
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    className="save-btn"
-                                    onClick={() => handleSaveEdit(index)}
-                                  >
-                                    Save
-                                  </Button>
+                                    <Button icon={<MoreOutlined />} />
+                                  </Dropdown>
                                 </Space>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="right-container">
-                            <div className="input-container">
-                              <Col lg={8} xs={10} sm={12}>
-                                <Link
-                                  to="/lesson"
-                                  style={{ textDecoration: "none" }}
-                                >
-                                  <h3>{lesson.name}</h3>
-                                </Link>
-                              </Col>
-                              <Space className="btn-container">
-                                {isPublished ? (
-                                  <Button
-                                    style={{
-                                      fontFamily: "Rajdhani",
-                                      background: "white",
-                                      border: "1px solid green",
-                                      color: "green",
-                                    }}
-                                  >
-                                    Published
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    type="default"
-                                    style={{
-                                      fontFamily: "Rajdhani",
-                                    }}
-                                    onClick={handlePublishClick}
-                                  >
-                                    Publish
-                                  </Button>
-                                )}
-                                {isAddContentVisible && (
-                                  <Button
-                                    type="default"
-                                    style={{ fontFamily: "Rajdhani" }}
-                                  >
-                                    Add Content
-                                  </Button>
-                                )}
-                                <Dropdown
-                                  overlay={menu2(index)}
-                                  trigger={["click"]}
-                                >
-                                  <Button icon={<MoreOutlined />} />
-                                </Dropdown>
-                              </Space>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
+                          )}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
 
-              {isAddingLesson && (
-                <div
-                  className="container1"
-                  style={{ paddingLeft: "0px", paddingRight: "0px" }}
-                >
-                  <div className="right-container">
-                    <div className="input-container">
-                      <Col lg={12} xs={24} sm={12}>
-                        <Input
-                          placeholder="New Lesson"
-                          value={newLesson}
-                          onChange={(e) => setNewLesson(e.target.value)}
-                        />
-                      </Col>
-                      <Space className="btn-container">
-                        <Button
-                          type="default"
-                          style={{
-                            fontFamily: "Rajdhani",
-                            fontSize: "16px",
-                          }}
-                          onClick={() => {
-                            setIsAddingLesson(false);
-                            setNewLesson("");
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          className="save-btn"
-                          onClick={() => {
-                            addLesson();
-                            setIsAddingLesson(false);
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Space>
+                {isAddingLesson && (
+                  <div
+                    className="container1"
+                    style={{ paddingLeft: "0px", paddingRight: "0px" }}
+                  >
+                    <div className="right-container">
+                      <div className="input-container">
+                        <Col lg={12} xs={24} sm={12}>
+                          <Input
+                            placeholder="New Lesson"
+                            value={newLesson}
+                            onChange={(e) => setNewLesson(e.target.value)}
+                          />
+                        </Col>
+                        <Space className="btn-container">
+                          <Button
+                            type="default"
+                            style={{
+                              fontFamily: "Rajdhani",
+                              fontSize: "16px",
+                            }}
+                            onClick={() => {
+                              setIsAddingLesson(false);
+                              setNewLesson("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            className="save-btn"
+                            onClick={() => {
+                              addLesson();
+                              setIsAddingLesson(false);
+                            }}
+                          >
+                            Save
+                          </Button>
+                        </Space>
+                      </div>
                     </div>
                   </div>
+                )}
+                <div className="divider"></div>
+                <div className="horizontal-container">
+                  <Row gutter={16} style={{ marginTop: "20px" }}>
+                    <Col span={12}>
+                      <Space>
+                        <Button
+                          type="default"
+                          style={{ fontFamily: "Rajdhani" }}
+                          onClick={() => {
+                            setIsAddingLesson(true);
+                          }}
+                        >
+                          New Lesson
+                        </Button>
+                        <Button
+                          type="default"
+                          style={{ fontFamily: "Rajdhani" }}
+                        >
+                          Bulk Upload
+                        </Button>
+                      </Space>
+                    </Col>
+                  </Row>
                 </div>
-              )}
-              <div className="divider"></div>
-              <div className="horizontal-container">
-                <Row gutter={16} style={{ marginTop: "20px" }}>
-                  <Col span={12}>
-                    <Space>
-                      <Button
-                        type="default"
-                        style={{ fontFamily: "Rajdhani" }}
-                        onClick={() => {
-                          setIsAddingLesson(true);
-                        }}
-                      >
-                        New Lesson
-                      </Button>
-                      <Button type="default" style={{ fontFamily: "Rajdhani" }}>
-                        Bulk Upload
-                      </Button>
-                    </Space>
-                  </Col>
-                </Row>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </Droppable>
+        )}
+      </Droppable>
+     
+    </>
   );
 };
 
 const MainCurriculum = ({ courseId }) => {
   console.log("main", courseId);
   const dispatch = useDispatch();
+  const [newLesson, setNewLesson] = useState("");
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const [newLessonName, setNewLessonName] = useState("");
   const section = useSelector((state) => state.section.sectionById);
+
+
   const [sections, setSections] = useState([]);
   const [sectionName, setSectionName] = useState("");
   const [lessons, setLessons] = useState([]);
-  const [isQuickActionsActive, setIsQuickActionsActive] = useState(false);
+  const [showNewSection, setShowNewSection] = useState(false);
 
-  const addSection = () => {
+  const sectionInfo = {
+    sectionName: sectionName,
+    courseId: courseId,
+  };
+
+  const handleSave = () => {
+    if (!sectionInfo.sectionName) {
+      message.error('Section name is required.');
+      return;
+    }
+    dispatch(addSection(sectionInfo));
+    message.success("Section created successfully!");
+  };
+
+
+
+  const addSections = () => {
     const newSection = {
       id: sections.length + 1,
       name: sectionName,
@@ -461,12 +492,23 @@ const MainCurriculum = ({ courseId }) => {
         id: uuidv4(),
         lesson: lesson,
       })),
-      isQuickActionsActive: isQuickActionsActive,
+      showNewSection: showNewSection,
     };
     setSections([...sections, newSection]);
     setSectionName("");
     setLessons([]);
-    setIsQuickActionsActive(true);
+    setShowNewSection(true);
+  
+  };
+
+  const addLesson = () => {
+    if (newLesson) {
+      const newLessonId = lessons.length + 1;
+      const newLessonItem = { id: newLessonId, name: newLesson };
+      setLessons([...lessons, newLessonItem]);
+      setNewLesson("");
+    }
+    setIsAddingLesson(false);
   };
 
   const removeSection = (sectionToRemove) => {
@@ -605,13 +647,13 @@ const MainCurriculum = ({ courseId }) => {
                             setSections(updatedSections);
                           }}
                           courseId={courseId}
-                          isQuickActionsActive={isQuickActionsActive}
-                          setIsQuickActionsActive={(value) => {
-                            const updatedSections = [...sections];
-                            updatedSections[sectionIndex].isQuickActionsActive =
-                              value;
-                            setSections(updatedSections);
-                          }}
+                          showNewSection={showNewSection}
+                          // setShowNewSection={(value) => {
+                          //   const updatedSections = [...sections];
+                          //   updatedSections[sectionIndex].showNewSection =
+                          //     value;
+                          //   setSections(updatedSections);
+                          // }}
                         />
                       </div>
                     )}
@@ -622,13 +664,150 @@ const MainCurriculum = ({ courseId }) => {
             )}
           </Droppable>
         </DragDropContext>
+        
+        {showNewSection && (
+          <div className="new-section-container">
+        <div
+          className="container"
+          style={{ paddingLeft: "0px", paddingRight: "0px" }}
+        >
+          <div className="right-container">
+            <div className="input-container">
+              <Col lg={18} xs={24} sm={12}>
+                <Input
+                  placeholder="New Section"
+                  value={sectionName}
+                  onChange={(e) => setSectionName(e.target.value)}
+                />
+              </Col>
+              <Space className="btn-container">
+                <Button
+                  type="default"
+                  style={{ fontFamily: "Rajdhani", fontSize: "16px" }}
+                  // onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button className="save-btn"
+                 onClick={handleSave}
+                 >
+                  Save
+                </Button>
+              </Space>
+            </div>
+
+            <div className="divider"></div>
+
+            {/* <div>
+              <div
+                className="container1"
+                style={{ paddingLeft: "0px", paddingRight: "0px" }}
+              >
+                <div className="right-container">
+                  <div className="input-container">
+                    <Col lg={12} xs={24} sm={12}>
+                      <Input
+                        value={newLessonName}
+                        onChange={(e) => setNewLessonName(e.target.value)}
+                      />
+                    </Col>
+                    <Space className="btn-container">
+                      <Button
+                        type="default"
+                        style={{
+                          fontFamily: "Rajdhani",
+                          fontSize: "16px",
+                        }}
+                        // onClick={handleCancelEdit}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        className="save-btn"
+                        // onClick={() => handleSaveEdit(index)}
+                      >
+                        Save
+                      </Button>
+                    </Space>
+                  </div>
+                </div>
+              </div>
+            </div> */}
+
+            {isAddingLesson && (
+              <div
+                className="container1"
+                style={{ paddingLeft: "0px", paddingRight: "0px" }}
+              >
+                <div className="right-container">
+                  <div className="input-container">
+                    <Col lg={12} xs={24} sm={12}>
+                      <Input
+                        placeholder="New Lesson"
+                        value={newLesson}
+                        onChange={(e) => setNewLesson(e.target.value)}
+                      />
+                    </Col>
+                    <Space className="btn-container">
+                      <Button
+                        type="default"
+                        style={{
+                          fontFamily: "Rajdhani",
+                          fontSize: "16px",
+                        }}
+                        onClick={() => {
+                          setIsAddingLesson(false);
+                          setNewLesson("");
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        className="save-btn"
+                        onClick={() => {
+                          // addLesson();
+                          setIsAddingLesson(false);
+                        }}
+                      >
+                        Save
+                      </Button>
+                    </Space>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="divider"></div>
+            <div className="horizontal-container">
+              <Row gutter={16} style={{ marginTop: "20px" }}>
+                <Col span={12}>
+                  <Space>
+                    <Button
+                      type="default"
+                      style={{ fontFamily: "Rajdhani" }}
+                      onClick={() => {
+                        setIsAddingLesson(true);
+                      }}
+                    >
+                      New Lesson
+                    </Button>
+                    <Button type="default" style={{ fontFamily: "Rajdhani" }}>
+                      Bulk Upload
+                    </Button>
+                  </Space>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </div>
+        </div>
+      )}
         <div className="new-section">
           <Row gutter={16}>
             <Col lg={12} xs={24} sm={12}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <PlusCircleOutlined
                   style={{ fontSize: "24px", marginRight: "8px" }}
-                  onClick={addSection}
+                  onClick={addSections}
                 />
                 <span>Add New Section</span>
               </div>

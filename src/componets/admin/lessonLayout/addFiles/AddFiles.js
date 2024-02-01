@@ -1,63 +1,45 @@
-import React, { useState } from "react";
-import { Space, Button, Row, Col, message, Upload,Dropdown,Menu } from "antd";
-import { InboxOutlined, LeftOutlined,EllipsisOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import React, { useState, useEffect } from "react";
+import { Space, Button, Upload, Row, Col, Menu, Dropdown, message } from "antd";
+import {
+  EllipsisOutlined,
+  InboxOutlined,
+  LeftOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import "./AddFiles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getLessonById } from "../../../../actions/lesson/lesson";
+import { addPpt } from "../../../../actions/addPPT/addPPT";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-const AddFiles = () => {
-  const [fileList, setFileList] = useState([]);
-  const [fileUploaded, setFileUploaded] = useState(false);
-  const [pdfFile, setPdfFile] = useState(null);
+const AddFiles = ({ lessonId }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const lessons = useSelector((state) => state.lesson.lessonById);
   const [lesson, setLesson] = useState("");
+  const [showNames, setShowNames] = useState([]);
 
-  console.log(pdfFile);
-
-  const handleFileListChange = (newFileList) => {
-    setFileList(newFileList);
-  };
-
-  const handleFileUpload = () => {
-    //this is added to show one file is uploaded
-    //  because it is not connected to backend
-    if (fileList.length > 0) {
-      const updatedFileList = [...fileList];
-      updatedFileList[0] = {
-        ...updatedFileList[0],
-        status: "done",
-      };
-      setFileList(updatedFileList);
-      setFileUploaded(true);
-      setPdfFile(updatedFileList[0]);
-    }
-  };
-
-  const fileStatus = (file) => {
-    if (file.status === "done") {
-      return `${(file.size / 1024).toFixed(2)} KB`;
-    } else if (file.status === "error") {
-      return "Upload Failed";
-    }
-    return "Uploading...";
-  };
-
-  const handleRename = () => {
-    const newName = prompt("Enter a new name for the section:", lesson);
-    if (newName) {
-      setLesson(newName);
-    }
-  };
+  const [fileList, setFileList] = useState([]);
 
   const handleDuplicate = () => {};
 
   const handleDelete = () => {};
 
+  useEffect(() => {
+    dispatch(getLessonById(lessonId));
+  }, [dispatch, lessonId]);
+
+  useEffect(() => {
+    if (lessons) {
+      setLesson(lessons?.data?.lessonName);
+    }
+  }, [lessons]);
+
   const menu = (
     <Menu>
-      <Menu.Item key="1" onClick={handleRename}>
+      <Menu.Item
+        key="1"
+        //  onClick={handleRename}
+      >
         <p style={{ fontFamily: "Rajdhani", margin: 0 }}> Rename Lesson</p>
       </Menu.Item>
       <Menu.Item key="2" onClick={handleDuplicate}>
@@ -71,6 +53,84 @@ const AddFiles = () => {
     </Menu>
   );
 
+  // const checkFileType = (file) => {
+  //   const allowedTypes = [
+  //     "application/vnd.ms-powerpoint",
+  //     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  //     "application/msword",
+  //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  //      "application/zip",
+  //   ];
+
+  //   const isFileTypeValid = allowedTypes.includes(file.type);
+
+  //   if (!isFileTypeValid) {
+  //     message.error("You can only upload PPT, PPTX, DOC,ZIP or DOCX files!");
+  //   }
+
+  //   return isFileTypeValid;
+  // };
+
+  const checkFileType = (file) => {
+    const allowedExtensions = [".ppt", ".pptx", ".doc", ".docx", ".zip"];
+
+    const fileName = file.name.toLowerCase();
+    const isValidExtension = allowedExtensions.some((ext) =>
+      fileName.endsWith(ext)
+    );
+
+    if (!isValidExtension) {
+      message.error("You can only upload PPT, PPTX, DOC, ZIP, or DOCX files!");
+    }
+
+    return isValidExtension;
+  };
+
+  const customRequest = ({ file, onSuccess, onError }) => {
+    setTimeout(() => {
+      onSuccess();
+    }, 1000);
+  };
+
+  const handleFileListChange = ({ fileList }) => {
+    setFileList(fileList);
+    const fileNames = fileList.map((file) => file.name);
+    setShowNames(fileNames);
+  };
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("lessonId", lessonId);
+
+      if (fileList.length === 0) {
+        message.error("Please select file.");
+        return;
+      }
+
+      for (const file of fileList) {
+        formData.append("lessonResource", file.originFileObj);
+      }
+
+      const res = await dispatch(addPpt(formData));
+
+      if (res.success) {
+        message.success(res.message);
+        setFileList([]);
+      } else {
+        message.error("Failed to upload files. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      console.log(error.response.data.message);
+      message.error("An error occurred while uploading the files.");
+    }
+  };
+
   return (
     <>
       <div className="add-files-breadcrumb">
@@ -82,10 +142,10 @@ const AddFiles = () => {
               padding: 0,
               margin: 0,
             }}
+            onClick={handleGoBack}
           >
-            <Link to={"/admin/card1"}>
-              <LeftOutlined  style={{ fontSize:'14px'}}/> &nbsp; Back to lesson layout
-            </Link>
+            <LeftOutlined style={{ fontSize: "14px" }} /> &nbsp; Back to lesson
+            layout
           </p>
 
           <Space>
@@ -95,73 +155,57 @@ const AddFiles = () => {
         </div>
       </div>
       <div className="add-files-container">
-        <h2>PDF Viewer</h2>
-        <p>Upload PDF documents that can be viewed in your lesson.</p>
+        <h2>Add Files(ppt,docx,doc & pptx)</h2>
+        <p> Upload files into your lesson.</p>
 
         <Row gutter={16}>
           <Col lg={14} sm={24} xs={24}>
             <div className="add-files">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h2>Lesson 1</h2>
+                <h2>{lesson}</h2>
                 <Dropdown overlay={menu} trigger={["click"]}>
                   <Button icon={<EllipsisOutlined />} />
                 </Dropdown>
               </div>
               <div className="add-files-subcontainer">
-                <div>
+                <>
                   <Upload
-                    multiple
-                    customRequest={() => {}}
+                    customRequest={customRequest}
+                    beforeUpload={checkFileType}
                     fileList={fileList}
-                    onChange={({ fileList }) => handleFileListChange(fileList)}
-                    beforeUpload={(file) => {
-                      if (file.type === "application/pdf") {
-                        return true;
-                      }
-                      message.error("Only PDF files are allowed!");
-                      return false;
-                    }}
+                    onChange={handleFileListChange}
+                    multiple
                   >
-                    {!fileUploaded ? (
-                      <div style={{ textAlign: "center" }}>
+                    <div style={{ textAlign: "center" }}>
                       <InboxOutlined
                         style={{ color: "#ddb42c", fontSize: "32px" }}
                       />
-                      <p>Select PDF files to upload</p>
+                      <p>Select files to upload</p>
                     </div>
-                    ) : (
-                      <p>Completed</p>
-                    )}
                   </Upload>
-                  <div style={{ width: '100%' }}>
-                    {fileList.map((file) => (
-                      <p key={file.uid}>
-                        {file.name} - {fileStatus(file)}
-                      </p>
-                    ))}
-                  </div>
-                  {!fileUploaded && (
-                    <Button className="upload-files-btn" onClick={handleFileUpload}>
+                  {fileList.length > 0 && (
+                    <Button
+                      className="upload-files-btn"
+                      onClick={handleUpload}
+                      style={{ marginTop: "20px" }}
+                    >
                       Upload
                     </Button>
                   )}
-                </div>
+                </>
               </div>
             </div>
           </Col>
           <Col lg={10} xs={24} sm={24}>
             <div className="files-setting">
-              <h2>PDF Viewer Settings</h2>
-              <div className="pdf-view-container">
-              <h2>File Name</h2>
-                <p>
-                 Receipt.pdf
-                </p>
-                {pdfFile && (
-                  <div className="pdf-viewer">
-                    <Document file={pdfFile}>
-                      <Page pageNumber={1} />
-                    </Document>
+              <h2>File Settings</h2>
+              <div className="scrollable-container">
+                {showNames.length > 0 && (
+                  <div>
+                    <h2>File Name</h2>
+                    {showNames.map((name, index) => (
+                      <p key={index}>{name}</p>
+                    ))}
                   </div>
                 )}
               </div>

@@ -1,0 +1,46 @@
+.coupon-breadcrumb {
+    padding: 10px;
+    background: #fff;
+  }
+  .coupon-breadcrumb h2 {
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+  }
+  
+  .coupon-container {
+    padding: 20px;
+  }
+  
+  .coupon-breadcrumb-subcontainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+  }
+
+  .coupon-subcontainer {
+    padding: 20px;
+    background-color: #fff;
+    border:1px solid black;
+    border-radius: 5px;
+  }
+
+  .coupon-subcontainer h2{
+  font-size: 24px;
+  font-family: Rajdhani,sans-serif;
+  }
+
+  .coupon-btn {
+    background: #ddb42c !important;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000 !important;
+    font-family: "Rajdhani", sans-serif;
+    margin:0px auto;
+    display: flex;
+    width:100px;
+    height:35px;
+  
+  }

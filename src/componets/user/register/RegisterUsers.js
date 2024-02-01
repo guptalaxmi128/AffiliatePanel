@@ -1,5 +1,5 @@
-import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import React,{ useState} from "react";
+import { Form, Input, Button, Checkbox,message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/img/logo_white.png";
@@ -9,6 +9,8 @@ import { registerUser } from "../../../actions/loginUser/loginUser";
 
 
 const RegisterUsers = () => {
+  const [loading,setLoading]=useState(false);
+  const [termAndConditionAccepted,setTermAndConditionAccepted]=useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const validateEmail = (rule, value) => {
@@ -20,17 +22,46 @@ const RegisterUsers = () => {
   };
 
   const validatePassword = (rule, value) => {
-    if (!value || value.length === 8) { 
-      return Promise.resolve();
+    if (!value || value.length >= 8) {
+      return Promise.resolve(); 
     }
-    return Promise.reject("Password must be equal to 8 characters long"); 
+    return Promise.reject("Password must be at least 8 characters long");
+  };
+ 
+
+  const onFinish = async (values) => {
+    try {
+      if (!termAndConditionAccepted) {
+        message.warning('Please accept the terms and conditions');
+        return;
+      }
+      setLoading(true); 
+      const payload = {
+        ...values,
+        termAndConditionAccepted,
+      };
+      const response = await dispatch(registerUser(payload));
+      // console.log("User Registration Response:", response);
+  
+      if (response.success) {
+        navigate("/user");
+        message.success('User registered successfully');
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      console.error("Error registering user:", error.response.data.message);
+      message.error(error.response.data.message);
+    } finally {
+      setLoading(false); 
+    }
   };
 
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-    dispatch(registerUser(values));
-    navigate("/user");
-  };
+  
+  
+  
+  
+  
   return (
     <>
       <div className="signup-container">
@@ -104,18 +135,18 @@ const RegisterUsers = () => {
               <Input.Password type="password" />
             </Form.Item>
             <Form.Item>
-              <Checkbox className="custom-checkbox">
+              <Checkbox className="custom-checkbox"  onChange={(e) => setTermAndConditionAccepted(e.target.checked)} >
                 I agree to the <a href="/terms">Terms</a> and{" "}
                 <a href="/privacy">Privacy Policy</a>
               </Checkbox>
             </Form.Item>
 
             <Form.Item>
-              {/* <Link to={"#"} style={{ textDecoration: "none" }}> */}
-                <Button className="signup-btn" htmlType="submit">
-                  Create Account
+            
+                <Button className="signup-btn" htmlType="submit" loading={loading}>
+                {loading ? 'Creating Account' : 'Create Account'}
                 </Button>
-              {/* </Link> */}
+             
             </Form.Item>
           </Form>
           <p>

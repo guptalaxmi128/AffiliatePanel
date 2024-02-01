@@ -31,6 +31,15 @@
     font-family: "Rajdhani", sans-serif;
  }
  
+ .published-button {
+  border: 1px solid green;
+  color: green;
+}
+
+.unpublished-button {
+  border: 1px solid red;
+  color: red;
+}
   
   
   

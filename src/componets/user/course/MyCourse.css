@@ -9,8 +9,7 @@
 }
 
 .my-course-container {
-  height: 100vh;
- 
+  height: auto;
 }
 
 .card-hover {
@@ -37,13 +36,29 @@
   color: goldenrod;
 }
 
-.custom-card1 {
+/* .custom-card1 {
     width: 300px;
-    box-shadow: 0 0 6px goldenrod;
-  }
+  
+  } */
 
-  @media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .my-course-container {
       padding: 60px; 
     }
-  }
+  } */
+
+.my-course-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* margin: auto; */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.custom-card1 {
+  margin-bottom: 20px;
+  flex: 1 0 calc(25% - 20px);
+  box-shadow: 0 0 6px goldenrod;
+  /* margin-right: 20px; */
+}

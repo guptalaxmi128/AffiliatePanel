@@ -15,6 +15,11 @@
   border-color: #ddb42c;
 }
 
+.ql-custom-link {
+  color: blue; /* Set link text color to blue */
+  text-decoration: underline; /* Add underline for links */
+}
+
 
 .ant-tabs-nav .ant-tabs-ink-bar {
   background-color: #ddb42c;
@@ -23,6 +28,18 @@
   color: #ddb42c; 
   border: 1px solid #ddb42c; 
 }
+
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark > .ant-menu.ant-menu-horizontal > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu-selected,
+:where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark > .ant-menu.ant-menu-horizontal > .ant-menu-submenu-selected {
+  background-color: black !important;
+}
+
+:where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark .ant-menu-item-selected,
+ :where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+  background-color: #ddb42c !important;
+ }
 
 
 .ant-menu-light .ant-menu-item:hover {
@@ -33,6 +50,10 @@
   background: #ddb42c;
   color:#fff !important;
 }
+.ant-menu-light .ant-menu-item-selected:hover {
+  color: #000 !important;
+}
+
 .ant-breadcrumb-link{
   font-family: "Rajdhani", sans-serif;
 }
@@ -67,6 +88,16 @@
 /* Desktop view */
 .desktop-menu {
   display: block;
+}
+
+/*for scrollbar */
+::-webkit-scrollbar {
+  height: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+ 
 }
 
 .mobile-menu-icon {
@@ -142,11 +173,11 @@ h6 {
   font-weight: 500;
 }
 a {
-  color: #22100d;
+  color: blue;
   text-decoration: none;
 }
 a:hover {
-  color: #f66962;
+  color: blue;
 }
 a:hover,
 a:active,
