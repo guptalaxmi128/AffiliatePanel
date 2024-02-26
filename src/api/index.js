@@ -50,7 +50,7 @@ export const getResult = (lessonId) =>
 export const addCourse = (courseInfo) => {
   return api.post(`api/admin/createCourse`, courseInfo);
 };
-export const getCourse = () => api.get(`api/admin/myCourses`);
+export const getCourse = (params) => api.get(`api/admin/myCourses`,{params});
 export const publishCourse = (id) => {
   return api.put(`api/admin/publicCourse/${id}`);
 };

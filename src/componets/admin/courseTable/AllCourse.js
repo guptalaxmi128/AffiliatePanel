@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 import { Table, Dropdown, Menu, Button, message } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
@@ -18,9 +18,6 @@ const tableContentStyle = {
   textAlign: "center",
 };
 
-// const localHost = "http://localhost:5000";
-const localHost = "https://affiliate-indian.onrender.com";
-// const localHost="http://3.224.85.30";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -39,12 +36,16 @@ const AllCourse = () => {
   const data = course?.data;
   // console.log(course);
   console.log(data);
+  const [loading,setLoading]=useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPage,setTotalPage]=useState('');
 
   const ActionMenu = ({ record }) => {
     // const handlePublish = () => {};
     const { id: courseId, allowAffiliate } = record || {};
-    console.log(courseId);
-    console.log(allowAffiliate);
+    // console.log(courseId);
+    // console.log(allowAffiliate);
     const handleDelete = async () => {
       try {
         const res = await dispatch(deleteCourse(courseId));
@@ -115,9 +116,29 @@ const AllCourse = () => {
     );
   };
 
+
+
   useEffect(() => {
-    dispatch(getCourse());
-  }, [dispatch]);
+    const fetchData = async () => {
+      setLoading(true);
+
+      const params = {
+        page: currentPage,
+        limit: pageSize,
+      };
+
+     const res= await dispatch(getCourse(params));
+      setTotalPage(res.totalPage);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [dispatch,currentPage, pageSize]);
+
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
 
   const columns = [
     {
@@ -128,7 +149,7 @@ const AllCourse = () => {
         <img
           // src={`${localHost}/courseFile/${record?.courseImageFileName}`}
           src={`${record?.courseImagePath}`}
-          alt="course-image"
+          alt="course"
           style={{ width: 50, height: 50 }}
         />
       ),
@@ -281,7 +302,16 @@ const AllCourse = () => {
           Create and manage courses in your school.
         </div>
         <div style={{ overflowX: "auto" }}>
-          <Table dataSource={data} columns={columns} />
+          <Table dataSource={data} columns={columns} loading={loading}
+             pagination={{
+                pageSize: pageSize,
+                current: currentPage,
+                onChange: handlePageChange,
+                total: totalPage * pageSize
+                // pageSizeOptions: ["10", "20", "30", "40","50"],
+                // showSizeChanger: true,
+              }}
+          />
         </div>
       </div>
     </>

@@ -23,12 +23,14 @@ export const addCourse = (courseInfo) => async (dispatch) => {
   }
 };
 
-export const getCourse = () => async (dispatch) => {
+export const getCourse = (params) => async (dispatch) => {
   try {
-    const { data } = await api.getCourse();
+    const { data } = await api.getCourse(params);
     dispatch({ type: GET_COURSE, payload: data });
+    return data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
